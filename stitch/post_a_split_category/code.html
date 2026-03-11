@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ChipIn - Post a Split</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#11b4d4",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#101f22",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex justify-center">
+<div class="relative flex h-full min-h-screen w-full max-w-[480px] flex-col bg-white dark:bg-slate-900 shadow-xl overflow-x-hidden">
+<!-- Header -->
+<div class="flex items-center bg-white dark:bg-slate-900 p-4 pb-2 justify-between sticky top-0 z-10">
+<button aria-label="Close" class="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center justify-start">
+<span class="material-symbols-outlined text-2xl">close</span>
+</button>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center pr-12">Post a Split - Category</h2>
+</div>
+<!-- Progress Section -->
+<div class="flex flex-col gap-3 p-4">
+<div class="flex gap-6 justify-between items-center">
+<p class="text-slate-900 dark:text-slate-100 text-base font-medium leading-normal">Pick Category</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal">Step 1 of 3</p>
+</div>
+<div class="rounded-full bg-slate-200 dark:bg-slate-700 h-2 overflow-hidden">
+<div class="h-full rounded-full bg-primary" style="width: 33.33%;"></div>
+</div>
+</div>
+<!-- Title Section -->
+<div class="px-4 pb-2 pt-5">
+<h3 class="text-slate-900 dark:text-slate-100 tracking-tight text-2xl font-bold leading-tight text-center">What is this for?</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm text-center mt-1">Select a category to help organize your split</p>
+</div>
+<!-- Categories Grid -->
+<div class="grid grid-cols-2 gap-3 p-4 flex-1">
+<!-- Apartment -->
+<button class="flex flex-1 gap-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-4 flex-col text-left hover:border-primary transition-colors group focus:ring-2 focus:ring-primary focus:outline-none">
+<div class="text-primary p-2 bg-primary/10 rounded-lg w-fit">
+<span class="material-symbols-outlined">home</span>
+</div>
+<div class="flex flex-col gap-1">
+<h2 class="text-slate-900 dark:text-slate-100 text-base font-bold leading-tight">Apartment</h2>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-normal leading-normal">Rent &amp; Utilities</p>
+</div>
+</button>
+<!-- Subscription -->
+<button class="flex flex-1 gap-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-4 flex-col text-left hover:border-primary transition-colors group focus:ring-2 focus:ring-primary focus:outline-none">
+<div class="text-primary p-2 bg-primary/10 rounded-lg w-fit">
+<span class="material-symbols-outlined">subscriptions</span>
+</div>
+<div class="flex flex-col gap-1">
+<h2 class="text-slate-900 dark:text-slate-100 text-base font-bold leading-tight">Subscription</h2>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-normal leading-normal">Streaming &amp; Apps</p>
+</div>
+</button>
+<!-- Carpool -->
+<button class="flex flex-1 gap-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-4 flex-col text-left hover:border-primary transition-colors group focus:ring-2 focus:ring-primary focus:outline-none">
+<div class="text-primary p-2 bg-primary/10 rounded-lg w-fit">
+<span class="material-symbols-outlined">directions_car</span>
+</div>
+<div class="flex flex-col gap-1">
+<h2 class="text-slate-900 dark:text-slate-100 text-base font-bold leading-tight">Carpool</h2>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-normal leading-normal">Shared Rides</p>
+</div>
+</button>
+<!-- Bills -->
+<button class="flex flex-1 gap-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-4 flex-col text-left hover:border-primary transition-colors group focus:ring-2 focus:ring-primary focus:outline-none">
+<div class="text-primary p-2 bg-primary/10 rounded-lg w-fit">
+<span class="material-symbols-outlined">receipt_long</span>
+</div>
+<div class="flex flex-col gap-1">
+<h2 class="text-slate-900 dark:text-slate-100 text-base font-bold leading-tight">Bills</h2>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-normal leading-normal">Household Bills</p>
+</div>
+</button>
+<!-- Office -->
+<button class="flex flex-1 gap-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-4 flex-col text-left hover:border-primary transition-colors group focus:ring-2 focus:ring-primary focus:outline-none">
+<div class="text-primary p-2 bg-primary/10 rounded-lg w-fit">
+<span class="material-symbols-outlined">work</span>
+</div>
+<div class="flex flex-col gap-1">
+<h2 class="text-slate-900 dark:text-slate-100 text-base font-bold leading-tight">Office</h2>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-normal leading-normal">Shared Supplies</p>
+</div>
+</button>
+<!-- Groceries -->
+<button class="flex flex-1 gap-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-4 flex-col text-left hover:border-primary transition-colors group focus:ring-2 focus:ring-primary focus:outline-none">
+<div class="text-primary p-2 bg-primary/10 rounded-lg w-fit">
+<span class="material-symbols-outlined">shopping_cart</span>
+</div>
+<div class="flex flex-col gap-1">
+<h2 class="text-slate-900 dark:text-slate-100 text-base font-bold leading-tight">Groceries</h2>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-normal leading-normal">Food &amp; Supplies</p>
+</div>
+</button>
+<!-- Other -->
+<button class="flex flex-1 gap-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-4 flex-col text-left hover:border-primary transition-colors group focus:ring-2 focus:ring-primary focus:outline-none col-span-2">
+<div class="flex items-center gap-4">
+<div class="text-primary p-2 bg-primary/10 rounded-lg w-fit shrink-0">
+<span class="material-symbols-outlined">more_horiz</span>
+</div>
+<div class="flex flex-col gap-1">
+<h2 class="text-slate-900 dark:text-slate-100 text-base font-bold leading-tight">Other</h2>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-normal leading-normal">Everything else you want to split</p>
+</div>
+</div>
+</button>
+</div>
+<!-- Footer Action -->
+<div class="sticky bottom-0 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 px-4 py-4 mt-auto">
+<button class="flex w-full cursor-not-allowed items-center justify-center overflow-hidden rounded-xl h-14 px-5 bg-slate-200 dark:bg-slate-700 text-slate-400 dark:text-slate-500 text-base font-bold leading-normal tracking-wide transition-all" disabled="">
+<span class="truncate">Next</span>
+</button>
+<p class="text-center text-xs text-slate-400 dark:text-slate-500 mt-3">Select a category to continue</p>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#11b4d4",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#101f22",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<title>Post a Split - Finish</title>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="max-w-md mx-auto bg-white dark:bg-slate-900 min-h-screen shadow-xl flex flex-col">
+<!-- TopAppBar -->
+<header class="flex items-center p-4 border-b border-primary/10">
+<button class="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center justify-center hover:bg-primary/10 rounded-full transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 ml-2">Post a Split - Finish</h2>
+</header>
+<main class="flex-1 overflow-y-auto">
+<!-- Progress Bar -->
+<div class="flex flex-col gap-3 p-6">
+<div class="flex gap-6 justify-between items-center">
+<p class="text-slate-900 dark:text-slate-100 text-base font-semibold">Step 3: Extras &amp; Publish</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">3/3</p>
+</div>
+<div class="w-full h-2 rounded-full bg-primary/20">
+<div class="h-2 rounded-full bg-primary" style="width: 100%;"></div>
+</div>
+</div>
+<!-- Description Section -->
+<div class="px-6 py-4">
+<label class="flex flex-col gap-2">
+<span class="text-slate-900 dark:text-slate-100 text-base font-semibold">Description</span>
+<textarea class="form-textarea w-full rounded-xl border-primary/20 dark:border-primary/40 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:border-primary focus:ring-1 focus:ring-primary min-h-[160px] p-4 text-sm leading-relaxed placeholder:text-slate-400" placeholder="Describe the living situation, rules, or anything else potential roommates should know..."></textarea>
+</label>
+</div>
+<!-- Tags Section -->
+<div class="px-6 py-4">
+<h3 class="text-slate-900 dark:text-slate-100 text-base font-semibold mb-3">Tags</h3>
+<div class="flex flex-wrap gap-2">
+<button class="flex items-center gap-1 px-4 py-2 rounded-full bg-primary text-white text-sm font-medium">
+                        Non-smoker <span class="material-symbols-outlined text-sm">close</span>
+</button>
+<button class="flex items-center gap-1 px-4 py-2 rounded-full bg-primary text-white text-sm font-medium">
+                        Professionals only <span class="material-symbols-outlined text-sm">close</span>
+</button>
+<button class="flex items-center gap-1 px-4 py-2 rounded-full border border-primary text-primary text-sm font-medium hover:bg-primary/5">
+<span class="material-symbols-outlined text-sm">add</span> Add tag
+                    </button>
+</div>
+</div>
+<!-- Preview Card -->
+<div class="px-6 py-6 bg-primary/5 mt-4">
+<h3 class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider mb-4">Preview Listing</h3>
+<div class="bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-sm border border-primary/10">
+<div class="relative h-32 w-full bg-slate-200">
+<img alt="Apartment interior" class="w-full h-full object-cover" data-alt="Modern minimalist apartment living room with natural light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB85KuvGK0bkN9z3lVpV3I94eUfOFowcGSTw_foVg0kVGwimXbpqsFiY_pHyC5NBnU8JvGb2PxYCypkh9buwhtCjo-QgII9DOVuBz8KYdVUheY9aiZPQwZushpxe4NP_WyXVooEibVMBRGcINkOAmkZroyIdjRwQup10U8bqGKKga7BiQqOe_EfwyAs0LOMYnFUiIIUOn4FAGJGA01skJAsHqEiy8zzRR97P-pyi6yvbJZIsLHNTMupffehXXGZs62ZWls8MvBhpO4c"/>
+<div class="absolute top-2 right-2 bg-white/90 dark:bg-slate-900/90 px-2 py-1 rounded text-[10px] font-bold text-primary">
+                            $850/mo
+                        </div>
+</div>
+<div class="p-3">
+<h4 class="text-slate-900 dark:text-slate-100 text-sm font-bold truncate">Modern 2BR in Downtown</h4>
+<p class="text-slate-500 dark:text-slate-400 text-[10px] flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-[12px]">location_on</span> San Francisco, CA
+                        </p>
+<div class="flex gap-1 mt-2">
+<span class="text-[9px] bg-primary/10 text-primary px-1.5 py-0.5 rounded">Non-smoker</span>
+<span class="text-[9px] bg-primary/10 text-primary px-1.5 py-0.5 rounded">Professionals</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Fixed Bottom Actions -->
+<footer class="p-6 border-t border-primary/10 flex flex-col gap-3">
+<button class="w-full py-4 bg-primary hover:bg-primary/90 text-white rounded-xl font-bold text-lg shadow-lg shadow-primary/20 transition-all active:scale-[0.98]">
+                Publish Split
+            </button>
+<button class="w-full py-3 bg-transparent text-slate-500 dark:text-slate-400 font-medium text-sm hover:text-primary transition-colors">
+                Save as Draft
+            </button>
+</footer>
+</div>
+</body></html>

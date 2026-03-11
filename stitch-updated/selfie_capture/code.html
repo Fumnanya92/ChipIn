@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ChipIn ID Verification - Selfie Capture</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#11b4d4",
+            "background-light": "#f6f8f8",
+            "background-dark": "#101f22",
+          },
+          fontFamily: {
+            "display": ["Inter"]
+          },
+          borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<!-- Header -->
+<header class="p-6 flex items-center justify-between">
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-slate-200/50 dark:bg-primary/10 text-slate-900 dark:text-primary">
+<span class="material-icons">arrow_back</span>
+</button>
+<div class="flex flex-col items-center">
+<h1 class="text-sm font-semibold uppercase tracking-widest text-primary">Identity Check</h1>
+<div class="flex gap-1 mt-1">
+<div class="h-1 w-6 rounded-full bg-primary"></div>
+<div class="h-1 w-6 rounded-full bg-primary"></div>
+<div class="h-1 w-6 rounded-full bg-primary/30"></div>
+</div>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-slate-200/50 dark:bg-primary/10 text-slate-900 dark:text-primary">
+<span class="material-icons">help_outline</span>
+</button>
+</header>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col items-center px-6 pb-12">
+<!-- Instruction Text -->
+<div class="text-center mb-8">
+<h2 class="text-2xl font-bold mb-2">Selfie Verification</h2>
+<p class="text-slate-500 dark:text-slate-400 max-w-xs mx-auto text-sm">
+        Position your face within the frame and ensure your features are clearly visible.
+      </p>
+</div>
+<!-- Camera Viewport Container -->
+<div class="relative w-full max-w-sm aspect-[3/4] rounded-3xl overflow-hidden border-4 border-slate-200 dark:border-primary/20 bg-slate-800 shadow-2xl">
+<!-- Simulated Camera Feed -->
+<img alt="Camera View" class="absolute inset-0 w-full h-full object-cover opacity-60 grayscale-[0.2]" data-alt="A person posing for a front-facing selfie camera" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBewvTTF_8AlgkTdpKsM_iapgqr7zySaK7su1iE_P6YO1yNeWnfngJvznkB851W198MjkeBY8xB3CSxfyjvWlkKFl4xGGFeBnDdfStfwbRB68CIUkwtHpNUeIP1dULsfiir0fgqLGm8jF38H4ZWh2143qgjRBMP-j3AVXAmGP43QLdQqUuNbjLFRN67oPHtgoTieJpAZxVa_h3Do2u-oi4I-f_86vjq0LMpOXBMfPZTmT-8wyHm-7OkvX5u0cefh-2C12vEpWR6QF1t"/>
+<!-- Overlay Mask -->
+<div class="absolute inset-0 pointer-events-none flex items-center justify-center">
+<!-- The Oval Guide -->
+<div class="w-72 h-96 border-4 border-primary rounded-[100%] shadow-[0_0_0_1000px_rgba(16,31,34,0.7)] flex items-center justify-center">
+<div class="absolute inset-0 border-[1px] border-primary/20 rounded-[100%] scale-110"></div>
+</div>
+<!-- Scanning Effect Element -->
+<div class="absolute w-72 h-1 bg-gradient-to-r from-transparent via-primary to-transparent opacity-50 top-1/2 -translate-y-1/2"></div>
+</div>
+<!-- Corner Accents -->
+<div class="absolute top-8 left-8 w-6 h-6 border-t-2 border-l-2 border-primary/50"></div>
+<div class="absolute top-8 right-8 w-6 h-6 border-t-2 border-r-2 border-primary/50"></div>
+<div class="absolute bottom-8 left-8 w-6 h-6 border-b-2 border-l-2 border-primary/50"></div>
+<div class="absolute bottom-8 right-8 w-6 h-6 border-b-2 border-r-2 border-primary/50"></div>
+</div>
+<!-- Capture Button -->
+<div class="mt-10 relative flex flex-col items-center">
+<button class="group relative flex items-center justify-center">
+<div class="absolute inset-0 bg-primary/20 rounded-full scale-125"></div>
+<div class="w-20 h-20 bg-primary rounded-full flex items-center justify-center shadow-lg shadow-primary/40 relative z-10 active:scale-95 transition-transform">
+<span class="material-icons text-white text-4xl">photo_camera</span>
+</div>
+</button>
+<span class="mt-4 text-xs font-medium text-slate-400 uppercase tracking-widest">Take Photo</span>
+</div>
+<!-- Capture Tips -->
+<div class="mt-12 grid grid-cols-2 gap-4 w-full max-w-md">
+<div class="bg-slate-100 dark:bg-primary/5 p-4 rounded-xl flex flex-col items-center text-center">
+<div class="w-10 h-10 rounded-full bg-white dark:bg-background-dark flex items-center justify-center mb-3">
+<span class="material-icons text-primary">wb_sunny</span>
+</div>
+<p class="text-xs font-semibold">Good Lighting</p>
+<p class="text-[10px] text-slate-500 mt-1">Avoid shadows on face</p>
+</div>
+<div class="bg-slate-100 dark:bg-primary/5 p-4 rounded-xl flex flex-col items-center text-center">
+<div class="w-10 h-10 rounded-full bg-white dark:bg-background-dark flex items-center justify-center mb-3">
+<span class="material-icons text-primary">visibility</span>
+</div>
+<p class="text-xs font-semibold">No Glasses</p>
+<p class="text-[10px] text-slate-500 mt-1">Ensure eyes are visible</p>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="p-6 text-center">
+<p class="text-xs text-slate-500">
+      Your biometric data is encrypted and used only for ID verification.
+      <a class="text-primary hover:underline ml-1" href="#">Privacy Policy</a>
+</p>
+</footer>
+</body></html>

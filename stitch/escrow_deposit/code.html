@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#11b4d4",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#101f22",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col max-w-md mx-auto bg-white dark:bg-slate-900 shadow-xl overflow-x-hidden">
+<!-- Top Navigation -->
+<div class="flex items-center bg-white dark:bg-slate-900 p-4 border-b border-slate-100 dark:border-slate-800">
+<button class="text-slate-900 dark:text-slate-100 flex size-10 items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight ml-2">Escrow Deposit</h2>
+</div>
+<div class="p-4 flex flex-col gap-6">
+<!-- Summary Card -->
+<div class="bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-700">
+<div class="h-32 bg-primary/10 flex items-center justify-center relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent"></div>
+<span class="material-symbols-outlined text-primary text-5xl relative z-10">subscriptions</span>
+</div>
+<div class="p-5 flex flex-col gap-3">
+<div>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium uppercase tracking-wider">Total Amount Due</p>
+<p class="text-slate-900 dark:text-slate-100 text-3xl font-bold">$4.00</p>
+</div>
+<div class="h-px bg-slate-100 dark:bg-slate-700 my-1"></div>
+<div class="flex justify-between items-center">
+<div>
+<p class="text-slate-900 dark:text-slate-100 text-base font-semibold">Netflix Premium Split</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm">Monthly Subscription</p>
+</div>
+<div class="bg-primary/10 text-primary text-xs font-bold px-2.5 py-1 rounded-full">
+                            Active
+                        </div>
+</div>
+</div>
+</div>
+<!-- Security Indicator -->
+<div class="flex items-center gap-3 bg-emerald-50 dark:bg-emerald-900/20 px-4 py-3 rounded-xl border border-emerald-100 dark:border-emerald-800/30">
+<div class="text-emerald-600 dark:text-emerald-400 flex items-center justify-center rounded-lg bg-emerald-100 dark:bg-emerald-800/40 shrink-0 size-10">
+<span class="material-symbols-outlined">lock</span>
+</div>
+<div class="flex flex-col">
+<p class="text-emerald-900 dark:text-emerald-100 text-sm font-semibold">Secure Escrow Payment</p>
+<p class="text-emerald-700 dark:text-emerald-400 text-xs">Verified by ChipIn Security</p>
+</div>
+<span class="material-symbols-outlined text-emerald-500 ml-auto">verified_user</span>
+</div>
+<!-- Payment Method Selection -->
+<div>
+<div class="flex justify-between items-center mb-3 px-1">
+<h3 class="text-slate-900 dark:text-slate-100 text-base font-bold">Payment Method</h3>
+<button class="text-primary text-sm font-bold">Add New</button>
+</div>
+<div class="flex flex-col gap-2">
+<!-- Option 1: Saved Visa -->
+<label class="flex items-center gap-4 bg-white dark:bg-slate-800 p-4 rounded-xl border-2 border-primary cursor-pointer">
+<div class="bg-slate-100 dark:bg-slate-700 rounded p-1 flex items-center justify-center w-12 h-8">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-400">credit_card</span>
+</div>
+<div class="flex flex-col flex-1">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-semibold">Visa ending in 4242</p>
+<p class="text-slate-500 dark:text-slate-400 text-xs">Expires 12/26</p>
+</div>
+<div class="shrink-0 flex items-center justify-center">
+<input checked="" class="w-5 h-5 text-primary focus:ring-primary border-slate-300 dark:border-slate-600" name="payment" type="radio"/>
+</div>
+</label>
+<!-- Option 2: Apple Pay -->
+<label class="flex items-center gap-4 bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-100 dark:border-slate-700 cursor-pointer">
+<div class="bg-slate-100 dark:bg-slate-700 rounded p-1 flex items-center justify-center w-12 h-8">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-400">account_balance_wallet</span>
+</div>
+<div class="flex flex-col flex-1">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-semibold">Apple Pay</p>
+<p class="text-slate-500 dark:text-slate-400 text-xs">Fast and secure</p>
+</div>
+<div class="shrink-0 flex items-center justify-center">
+<input class="w-5 h-5 text-primary focus:ring-primary border-slate-300 dark:border-slate-600" name="payment" type="radio"/>
+</div>
+</label>
+</div>
+</div>
+<!-- Information Footer -->
+<div class="flex gap-3 px-1">
+<span class="material-symbols-outlined text-slate-400 text-xl">info</span>
+<p class="text-slate-500 dark:text-slate-400 text-xs leading-relaxed">
+                    Funds are held securely by ChipIn and only released to the group creator once the split is active and verified. You can request a refund if the split doesn't start.
+                </p>
+</div>
+</div>
+<!-- Sticky Bottom Actions -->
+<div class="mt-auto p-4 flex flex-col gap-3 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800">
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2">
+                Pay $4.00
+                <span class="material-symbols-outlined text-lg">arrow_forward</span>
+</button>
+<button class="w-full bg-transparent hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 font-medium py-3 rounded-xl transition-all">
+                Cancel and go back
+            </button>
+</div>
+</div>
+</body></html>
