@@ -104,7 +104,13 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
       if (verified) {
         await ref.read(authNotifierProvider.notifier).markPhoneVerified();
         if (!mounted) return;
-        context.go('/home');
+        // When called from signup flow (email present) go to home.
+        // When called from verification screen (email empty) just pop back.
+        if (widget.email.isNotEmpty) {
+          context.go('/home');
+        } else {
+          context.pop();
+        }
       } else {
         setState(() => _errorMsg = 'Incorrect code. Try again.');
       }

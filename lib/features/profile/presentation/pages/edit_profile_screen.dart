@@ -91,7 +91,8 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
             location: _locationCtrl.text.trim(),
             avatarUrl: newAvatarUrl,
           );
-      // Also refresh the auth notifier
+      // Refresh both the auth state and the profile cache so changes show immediately.
+      ref.invalidate(userProfileProvider('me'));
       await ref.read(authNotifierProvider.notifier).build();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

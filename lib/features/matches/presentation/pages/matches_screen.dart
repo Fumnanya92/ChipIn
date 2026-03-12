@@ -231,7 +231,7 @@ class _MatchCard extends ConsumerWidget {
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Text(
-                                '\$${match.listingAmount!.toStringAsFixed(match.listingAmount!.truncateToDouble() == match.listingAmount! ? 0 : 2)}',
+                                '₦${match.listingAmount!.toStringAsFixed(match.listingAmount!.truncateToDouble() == match.listingAmount! ? 0 : 2)}',
                                 style: const TextStyle(
                                   fontFamily: 'Inter',
                                   fontSize: 11,

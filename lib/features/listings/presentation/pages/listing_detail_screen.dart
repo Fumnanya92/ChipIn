@@ -258,7 +258,7 @@ class _ListingDetailScreenState extends ConsumerState<ListingDetailScreen> {
                             child: _CostCard(
                               label: 'Total Plan',
                               value:
-                                  '\$${listing.totalCost.toStringAsFixed(listing.totalCost.truncateToDouble() == listing.totalCost ? 0 : 2)}',
+                                  '₦${listing.totalCost.toStringAsFixed(listing.totalCost.truncateToDouble() == listing.totalCost ? 0 : 2)}',
                               suffix: _durationSuffix(listing.duration),
                               icon: Icons.payments_outlined,
                             ),
@@ -268,7 +268,7 @@ class _ListingDetailScreenState extends ConsumerState<ListingDetailScreen> {
                             child: _CostCard(
                               label: 'Your Share',
                               value:
-                                  '\$${listing.splitAmount.toStringAsFixed(listing.splitAmount.truncateToDouble() == listing.splitAmount ? 0 : 2)}',
+                                  '₦${listing.splitAmount.toStringAsFixed(listing.splitAmount.truncateToDouble() == listing.splitAmount ? 0 : 2)}',
                               suffix: _durationSuffix(listing.duration),
                               icon: Icons.person_outlined,
                               highlight: true,

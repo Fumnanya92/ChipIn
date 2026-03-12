@@ -33,6 +33,7 @@ class _LatestFeedScreenState extends ConsumerState<LatestFeedScreen> {
           ? listingsProvider
           : listingsByCategoryProvider(_selectedCategory),
     );
+    final userId = ref.watch(currentUserIdProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
@@ -61,8 +62,41 @@ class _LatestFeedScreenState extends ConsumerState<LatestFeedScreen> {
             ),
           ],
         ),
-        automaticallyImplyLeading: false,
+        actions: userId == null
+            ? [
+                TextButton(
+                  onPressed: () => context.go('/login'),
+                  child: const Text('Sign In'),
+                ),
+              ]
+            : null,
       ),
+      // ── Auth CTA bar — only shown for guests ────────────────────────────
+      bottomNavigationBar: userId == null
+          ? SafeArea(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: () => context.go('/login'),
+                        child: const Text('Sign In'),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () => context.go('/signup'),
+                        child: const Text('Get Started'),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          : null,
       body: CustomScrollView(
         slivers: [
           // ── Community Stats ─────────────────────────────────────────────
@@ -294,7 +328,7 @@ class _StatsGrid extends StatelessWidget {
       _StatItem('Active Users', '12k+', 0.75, false, isDark),
       _StatItem('Matches', '$_totalSlots+', 0.5, false, isDark),
       _StatItem('Listings', '${listings.length}', listings.isEmpty ? 0.0 : 0.66, false, isDark),
-      _StatItem('Total Saved', r'$2.4M', 1.0, true, isDark),
+      _StatItem('Total Saved', '₦2.4M', 1.0, true, isDark),
     ];
     return GridView.count(
       crossAxisCount: 2,
@@ -391,10 +425,10 @@ class _FeedCardState extends ConsumerState<_FeedCard> {
         : a.toStringAsFixed(2);
     switch (widget.listing.duration) {
       case ListingDuration.monthly:
-        return '\$$s/mo';
+        return '₦$s/mo';
       case ListingDuration.oneTime:
       case ListingDuration.custom:
-        return '\$$s/pp';
+        return '₦$s/pp';
     }
   }
 

@@ -177,7 +177,7 @@ class _EscrowDepositScreenState extends ConsumerState<EscrowDepositScreen> {
 
   Widget _buildContent(MatchModel match) {
     final amount = match.listingAmount ?? 0.0;
-    final fmt = NumberFormat.currency(symbol: '\$');
+    final fmt = NumberFormat.currency(symbol: '₦');
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 20, 20, 40),

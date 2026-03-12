@@ -221,7 +221,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                             ),
                           ),
                           Text(
-                            '\$${_perPersonShare.toStringAsFixed(2)} / person',
+                            '₦${_perPersonShare.toStringAsFixed(2)} / person',
                             style: const TextStyle(
                               fontFamily: 'Inter',
                               fontSize: 18,

@@ -110,9 +110,9 @@ class ListingModel extends Equatable {
         (e) => e.name == json['category'],
         orElse: () => ListingCategory.other,
       ),
-      totalCost: (json['total_cost'] as num).toDouble(),
-      splitAmount: (json['split_amount'] as num).toDouble(),
-      slotsTotal: json['slots_total'] as int,
+      totalCost: ((json['total_cost'] ?? json['amount']) as num).toDouble(),
+      splitAmount: ((json['split_amount'] ?? json['amount']) as num).toDouble(),
+      slotsTotal: (json['slots_total'] ?? json['split_ways'] ?? 2) as int,
       slotsFilled: json['slots_filled'] as int,
       duration: ListingDuration.values.firstWhere(
         (e) => e.name == json['duration'],

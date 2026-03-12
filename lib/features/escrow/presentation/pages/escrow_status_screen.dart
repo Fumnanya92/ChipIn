@@ -65,7 +65,7 @@ class _EscrowStatusScreenState extends ConsumerState<EscrowStatusScreen> {
   Widget build(BuildContext context) {
     final paymentsAsync = ref.watch(escrowPaymentsProvider(widget.matchId));
     final currentUserId = ref.read(currentUserIdProvider);
-    final fmt = NumberFormat.currency(symbol: '\$');
+    final fmt = NumberFormat.currency(symbol: '₦');
 
     return Scaffold(
       appBar: AppBar(

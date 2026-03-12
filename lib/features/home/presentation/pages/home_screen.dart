@@ -148,9 +148,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
                     const Spacer(),
                     GestureDetector(
-                      onTap: () {
-                        setState(() => _selectedCategory = null);
-                      },
+                      onTap: () => context.go('/browse'),
                       child: Padding(
                         padding: const EdgeInsets.only(right: 20),
                         child: Text(
@@ -412,11 +410,11 @@ class ListingCard extends StatelessWidget {
     final amount = listing.splitAmount;
     switch (listing.duration) {
       case ListingDuration.monthly:
-        return '\$${amount.toStringAsFixed(amount.truncateToDouble() == amount ? 0 : 2)}/mo';
+        return '₦${amount.toStringAsFixed(amount.truncateToDouble() == amount ? 0 : 2)}/mo';
       case ListingDuration.oneTime:
-        return '\$${amount.toStringAsFixed(amount.truncateToDouble() == amount ? 0 : 2)}';
+        return '₦${amount.toStringAsFixed(amount.truncateToDouble() == amount ? 0 : 2)}';
       case ListingDuration.custom:
-        return '\$${amount.toStringAsFixed(amount.truncateToDouble() == amount ? 0 : 2)}/pp';
+        return '₦${amount.toStringAsFixed(amount.truncateToDouble() == amount ? 0 : 2)}/pp';
     }
   }
 

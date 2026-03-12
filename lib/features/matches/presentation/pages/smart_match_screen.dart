@@ -342,7 +342,7 @@ class _SmartCard extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              '\$${listing.splitAmount.toStringAsFixed(listing.splitAmount.truncateToDouble() == listing.splitAmount ? 0 : 2)}/person',
+                              '₦${listing.splitAmount.toStringAsFixed(listing.splitAmount.truncateToDouble() == listing.splitAmount ? 0 : 2)}/person',
                               style: TextStyle(
                                 fontFamily: 'Inter',
                                 fontSize: 14,

@@ -83,7 +83,7 @@ class _PostExtrasScreenState extends ConsumerState<PostExtrasScreen> {
     );
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.scaffoldBg(context),
       appBar: AppBar(
         title: const Text('Post a Split — Finish'),
       ),
@@ -164,16 +164,33 @@ class _PostExtrasScreenState extends ConsumerState<PostExtrasScreen> {
               spacing: 8,
               runSpacing: 8,
               children: _tags
-                  .map((t) => Chip(
-                        label: Text(t,
-                            style: const TextStyle(
-                                fontFamily: 'Inter', fontSize: 12)),
-                        onDeleted: () =>
-                            setState(() => _tags.remove(t)),
-                        deleteIcon: const Icon(Icons.close_rounded, size: 14),
-                        backgroundColor: AppColors.primaryLight,
-                        side: const BorderSide(color: AppColors.primaryLight),
-                      ))
+                  .map((t) {
+                        final isDark =
+                            Theme.of(context).brightness == Brightness.dark;
+                        return Chip(
+                          label: Text(t,
+                              style: TextStyle(
+                                  fontFamily: 'Inter',
+                                  fontSize: 12,
+                                  color: isDark
+                                      ? AppColors.primary
+                                      : AppColors.textPrimary)),
+                          onDeleted: () =>
+                              setState(() => _tags.remove(t)),
+                          deleteIcon: Icon(Icons.close_rounded,
+                              size: 14,
+                              color: isDark
+                                  ? AppColors.primary
+                                  : AppColors.textSecondary),
+                          backgroundColor: isDark
+                              ? AppColors.primary.withValues(alpha: 0.15)
+                              : AppColors.primaryLight,
+                          side: BorderSide(
+                              color: isDark
+                                  ? AppColors.primary.withValues(alpha: 0.4)
+                                  : AppColors.primaryLight),
+                        );
+                      })
                   .toList(),
             ),
           ],
@@ -221,7 +238,7 @@ class _PostExtrasScreenState extends ConsumerState<PostExtrasScreen> {
                     ),
                     const Spacer(),
                     Text(
-                      '\$${amount.toStringAsFixed(amount.truncateToDouble() == amount ? 0 : 2)}/mo',
+                      '₦${amount.toStringAsFixed(amount.truncateToDouble() == amount ? 0 : 2)}/mo',
                       style: const TextStyle(
                         fontFamily: 'Inter',
                         fontSize: 16,

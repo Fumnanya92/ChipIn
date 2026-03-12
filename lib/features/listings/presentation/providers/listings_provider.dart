@@ -97,6 +97,9 @@ class ListingsNotifier extends AsyncNotifier<List<ListingModel>> {
     final now = DateTime.now().toIso8601String();
     final row = {
       ...data,
+      // Legacy column aliases kept until migration is applied to production.
+      'amount': (data['total_cost'] as num?)?.toDouble() ?? 0.0,
+      'split_ways': (data['slots_total'] as num?)?.toInt() ?? 2,
       'user_id': userId,
       'slots_filled': 0,
       'status': 'active',

@@ -124,7 +124,7 @@ class _VerificationScreenState extends ConsumerState<VerificationScreen> {
     setState(() => _submittingPayment = false);
     showDialog(
       context: context,
-      builder: (_) => AlertDialog(
+      builder: (dialogCtx) => AlertDialog(
         title: const Text('Payment Verification'),
         content: const Text(
           'In Phase 3, this will launch the Paystack payment flow where you can '
@@ -133,7 +133,7 @@ class _VerificationScreenState extends ConsumerState<VerificationScreen> {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(dialogCtx),
             child: const Text('OK'),
           ),
         ],
