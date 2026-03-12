@@ -17,6 +17,8 @@ class _VerificationScreenState extends ConsumerState<VerificationScreen> {
 
   Future<void> _startPhoneVerification(bool alreadyVerified) async {
     if (alreadyVerified) return;
+    // Keep controller as a field so it is never disposed while the sheet
+    // dismiss-animation is still rendering the TextField.
     final phoneCtrl = TextEditingController();
     final result = await showModalBottomSheet<String>(
       context: context,
@@ -28,14 +30,26 @@ class _VerificationScreenState extends ConsumerState<VerificationScreen> {
         ),
         child: Container(
           padding: const EdgeInsets.fromLTRB(24, 20, 24, 32),
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          decoration: BoxDecoration(
+            color: Theme.of(ctx).scaffoldBackgroundColor,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // drag handle
+              Center(
+                child: Container(
+                  width: 36,
+                  height: 4,
+                  margin: const EdgeInsets.only(bottom: 16),
+                  decoration: BoxDecoration(
+                    color: AppColors.textMuted.withValues(alpha: 0.4),
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
               const Text(
                 'Verify Your Phone',
                 style: TextStyle(
@@ -47,7 +61,7 @@ class _VerificationScreenState extends ConsumerState<VerificationScreen> {
               ),
               const SizedBox(height: 6),
               const Text(
-                'Enter your phone number and we\'ll send you a verification code.',
+                "Enter your phone number and we'll send you a verification code.",
                 style: TextStyle(
                     fontFamily: 'Inter',
                     fontSize: 13,
@@ -79,6 +93,8 @@ class _VerificationScreenState extends ConsumerState<VerificationScreen> {
                         color: AppColors.primary, width: 2),
                   ),
                 ),
+                onSubmitted: (v) =>
+                    Navigator.pop(ctx, v.trim()),
               ),
               const SizedBox(height: 20),
               SizedBox(
@@ -101,7 +117,9 @@ class _VerificationScreenState extends ConsumerState<VerificationScreen> {
         ),
       ),
     );
-    phoneCtrl.dispose();
+    // Delay dispose by one frame so any in-progress dismissal animation that
+    // still references the controller finishes before we tear it down.
+    WidgetsBinding.instance.addPostFrameCallback((_) => phoneCtrl.dispose());
     if (result != null && result.isNotEmpty && mounted) {
       context.push('/otp', extra: {
         'phone': result,
