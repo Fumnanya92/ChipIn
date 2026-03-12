@@ -26,6 +26,30 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     super.dispose();
   }
 
+  static String _friendlyError(Object e) {
+    final raw = e.toString();
+    if (raw.contains('Email not confirmed') ||
+        raw.contains('email_not_confirmed')) {
+      return 'Please confirm your email first. Check your inbox for a verification link from ChipIn.';
+    }
+    if (raw.contains('Invalid login credentials') ||
+        raw.contains('invalid_credentials')) {
+      return 'Incorrect email or password. Please try again.';
+    }
+    if (raw.contains('User not found') || raw.contains('user_not_found')) {
+      return 'No account found with this email. Please sign up first.';
+    }
+    if (raw.contains('rate_limit') ||
+        raw.contains('too_many_requests') ||
+        raw.contains('429')) {
+      return 'Too many attempts. Please wait a moment and try again.';
+    }
+    if (raw.contains('network') || raw.contains('SocketException')) {
+      return 'No internet connection. Please check your network and try again.';
+    }
+    return 'Sign in failed. Please check your details and try again.';
+  }
+
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
     setState(() {
@@ -40,7 +64,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       if (!mounted) return;
       context.go('/home');
     } catch (e) {
-      setState(() => _errorMsg = e.toString());
+      setState(() => _errorMsg = _friendlyError(e));
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }

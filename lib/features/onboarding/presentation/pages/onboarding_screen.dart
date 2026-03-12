@@ -51,7 +51,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         curve: Curves.easeInOut,
       );
     } else {
-      context.go('/signup');
+      context.go('/latest-feed');
     }
   }
 
@@ -68,7 +68,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               child: Padding(
                 padding: const EdgeInsets.only(top: 12, right: 20),
                 child: TextButton(
-                  onPressed: () => context.go('/signup'),
+                  onPressed: () => context.go('/latest-feed'),
                   child: const Text('Skip'),
                 ),
               ),

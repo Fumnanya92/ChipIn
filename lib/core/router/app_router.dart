@@ -46,6 +46,9 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           loc == '/splash';
       final isPublicRoute = loc == '/latest-feed';
 
+      // Don't redirect while auth state is still loading (preserves session)
+      if (authState.isLoading) return null;
+
       if (!isAuthenticated && !isAuthRoute && !isPublicRoute) {
         return '/login';
       }

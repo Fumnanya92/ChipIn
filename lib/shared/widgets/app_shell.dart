@@ -32,7 +32,40 @@ class AppShell extends StatelessWidget {
     final activeColor = AppColors.primary;
     final inactiveColor = AppColors.textMuted;
 
-    return Scaffold(
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
+        // If not on first tab, go to first tab instead of exiting
+        if (shell.currentIndex != 0) {
+          shell.goBranch(0, initialLocation: true);
+          return;
+        }
+        // On home tab — ask user to confirm exit
+        final shouldExit = await showDialog<bool>(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: const Text('Exit ChipIn?'),
+            content: const Text('Are you sure you want to leave?'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx, false),
+                child: const Text('Stay'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(ctx, true),
+                child: const Text('Exit'),
+              ),
+            ],
+          ),
+        );
+        if (shouldExit == true && context.mounted) {
+          // Allow the system to handle the back (exit)
+          // ignore: use_build_context_synchronously
+          Navigator.of(context).pop();
+        }
+      },
+      child: Scaffold(
       body: shell,
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.push('/post/category'),
@@ -93,7 +126,8 @@ class AppShell extends StatelessWidget {
           ),
         ),
       ),
-    );
+    ),   // end Scaffold (child of PopScope)
+    );   // end PopScope
   }
 }
 

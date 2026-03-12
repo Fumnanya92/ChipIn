@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:chipin/core/theme/app_theme.dart';
 import 'package:chipin/features/auth/presentation/providers/auth_provider.dart';
 import 'package:chipin/features/profile/presentation/providers/profile_provider.dart';
@@ -5,6 +6,8 @@ import 'package:chipin/shared/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' show FileOptions;
 
 class EditProfileScreen extends ConsumerStatefulWidget {
   const EditProfileScreen({super.key});
@@ -19,6 +22,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   late TextEditingController _bioCtrl;
   late TextEditingController _locationCtrl;
   bool _saving = false;
+  File? _pendingAvatar;
 
   @override
   void initState() {
@@ -45,14 +49,47 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     super.dispose();
   }
 
+  Future<void> _pickAvatar() async {
+    final picker = ImagePicker();
+    final XFile? file =
+        await picker.pickImage(source: ImageSource.gallery, imageQuality: 80);
+    if (file != null) {
+      setState(() => _pendingAvatar = File(file.path));
+    }
+  }
+
   Future<void> _save() async {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _saving = true);
     try {
+      String? newAvatarUrl;
+
+      // Upload new avatar if the user picked one
+      if (_pendingAvatar != null) {
+        final userId = ref.read(currentUserIdProvider);
+        if (userId != null) {
+          final supabase = ref.read(supabaseClientProvider);
+          final bytes = await _pendingAvatar!.readAsBytes();
+          final ext = _pendingAvatar!.path.split('.').last.toLowerCase();
+          final storagePath = '$userId/avatar.$ext';
+          await supabase.storage.from('avatars').uploadBinary(
+                storagePath,
+                bytes,
+                fileOptions: FileOptions(
+                  upsert: true,
+                  contentType: 'image/$ext',
+                ),
+              );
+          newAvatarUrl =
+              supabase.storage.from('avatars').getPublicUrl(storagePath);
+        }
+      }
+
       await ref.read(profileNotifierProvider.notifier).updateProfile(
             fullName: _nameCtrl.text.trim(),
             bio: _bioCtrl.text.trim(),
             location: _locationCtrl.text.trim(),
+            avatarUrl: newAvatarUrl,
           );
       // Also refresh the auth notifier
       await ref.read(authNotifierProvider.notifier).build();
@@ -65,7 +102,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $e')),
+          SnackBar(content: Text('Could not save changes. Please try again.')),
         );
       }
     } finally {
@@ -125,43 +162,49 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Avatar (display only — future: tap to change)
+            // Avatar — tap to change
             Center(
-              child: Stack(
-                children: [
-                  CircleAvatar(
-                    radius: 52,
-                    backgroundColor: AppColors.primaryLight,
-                    backgroundImage: profile?.avatarUrl != null
-                        ? NetworkImage(profile!.avatarUrl!)
-                        : null,
-                    child: profile?.avatarUrl == null
-                        ? Text(
-                            (profile?.displayName.isNotEmpty == true)
-                                ? profile!.displayName[0].toUpperCase()
-                                : 'C',
-                            style: const TextStyle(
-                              fontSize: 38,
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.primary,
-                            ),
-                          )
-                        : null,
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: Container(
-                      padding: const EdgeInsets.all(6),
-                      decoration: const BoxDecoration(
-                        color: AppColors.primary,
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(Icons.camera_alt_rounded,
-                          size: 16, color: Colors.white),
+              child: GestureDetector(
+                onTap: _pickAvatar,
+                child: Stack(
+                  children: [
+                    CircleAvatar(
+                      radius: 52,
+                      backgroundColor: AppColors.primaryLight,
+                      backgroundImage: _pendingAvatar != null
+                          ? FileImage(_pendingAvatar!) as ImageProvider
+                          : (profile?.avatarUrl != null
+                              ? NetworkImage(profile!.avatarUrl!)
+                              : null),
+                      child: (_pendingAvatar == null &&
+                              profile?.avatarUrl == null)
+                          ? Text(
+                              (profile?.displayName.isNotEmpty == true)
+                                  ? profile!.displayName[0].toUpperCase()
+                                  : 'C',
+                              style: const TextStyle(
+                                fontSize: 38,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.primary,
+                              ),
+                            )
+                          : null,
                     ),
-                  ),
-                ],
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: Container(
+                        padding: const EdgeInsets.all(6),
+                        decoration: const BoxDecoration(
+                          color: AppColors.primary,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(Icons.camera_alt_rounded,
+                            size: 16, color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             const SizedBox(height: 28),

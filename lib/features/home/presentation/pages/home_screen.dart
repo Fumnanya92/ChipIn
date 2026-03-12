@@ -739,6 +739,8 @@ class _QuickBanner extends StatelessWidget {
                 children: [
                   Text(
                     label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
                       fontFamily: 'Inter',
                       fontSize: 13,
@@ -748,6 +750,8 @@ class _QuickBanner extends StatelessWidget {
                   ),
                   Text(
                     sublabel,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontFamily: 'Inter',
                       fontSize: 10,

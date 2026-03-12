@@ -15,8 +15,104 @@ class VerificationScreen extends ConsumerStatefulWidget {
 class _VerificationScreenState extends ConsumerState<VerificationScreen> {
   bool _submittingPayment = false;
 
+  Future<void> _startPhoneVerification(bool alreadyVerified) async {
+    if (alreadyVerified) return;
+    final phoneCtrl = TextEditingController();
+    final result = await showModalBottomSheet<String>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(ctx).viewInsets.bottom,
+        ),
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(24, 20, 24, 32),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Verify Your Phone',
+                style: TextStyle(
+                  fontFamily: 'Inter',
+                  fontSize: 18,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.textPrimary,
+                ),
+              ),
+              const SizedBox(height: 6),
+              const Text(
+                'Enter your phone number and we\'ll send you a verification code.',
+                style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 13,
+                    color: AppColors.textSecondary),
+              ),
+              const SizedBox(height: 20),
+              TextField(
+                controller: phoneCtrl,
+                keyboardType: TextInputType.phone,
+                autofocus: true,
+                decoration: InputDecoration(
+                  hintText: '+234 800 000 0000',
+                  prefixIcon: const Icon(Icons.phone_outlined),
+                  filled: true,
+                  fillColor: const Color(0xFFF8FAFC),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide:
+                        const BorderSide(color: AppColors.borderLight),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide:
+                        const BorderSide(color: AppColors.borderLight),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(
+                        color: AppColors.primary, width: 2),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: () =>
+                      Navigator.pop(ctx, phoneCtrl.text.trim()),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12)),
+                  ),
+                  child: const Text('Send Code'),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+    phoneCtrl.dispose();
+    if (result != null && result.isNotEmpty && mounted) {
+      context.push('/otp', extra: {
+        'phone': result,
+        'fullName': '',
+        'email': '',
+        'password': '',
+      });
+    }
+  }
+
   Future<void> _startIdVerification() async {
-    // Navigate to the new multi-step ID verification flow.
     context.push('/verify/intro');
   }
 
@@ -142,7 +238,11 @@ class _VerificationScreenState extends ConsumerState<VerificationScreen> {
                 points: '+20 pts',
                 isDone: profile?.phoneVerified ?? false,
                 isLoading: false,
-                onTap: null, // Already done
+                onTap: (profile?.phoneVerified ?? false)
+                    ? null
+                    : () => _startPhoneVerification(
+                          profile?.phoneVerified ?? false,
+                        ),
               ),
               const SizedBox(height: 12),
 

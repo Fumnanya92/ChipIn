@@ -17,7 +17,9 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   final _emailCtrl = TextEditingController();
   final _phoneCtrl = TextEditingController();
   final _passwordCtrl = TextEditingController();
+  final _confirmCtrl = TextEditingController();
   bool _obscure = true;
+  bool _confirmObscure = true;
   bool _isLoading = false;
   String? _errorMsg;
 
@@ -27,7 +29,33 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     _emailCtrl.dispose();
     _phoneCtrl.dispose();
     _passwordCtrl.dispose();
+    _confirmCtrl.dispose();
     super.dispose();
+  }
+
+  static String _friendlyError(Object e) {
+    final raw = e.toString();
+    if (raw.contains('User already registered') ||
+        raw.contains('user_already_exists') ||
+        raw.contains('already been registered')) {
+      return 'An account with this email already exists. Please sign in instead.';
+    }
+    if (raw.contains('Password should be at least') ||
+        raw.contains('weak_password')) {
+      return 'Please use a stronger password (at least 8 characters).';
+    }
+    if (raw.contains('signup_disabled')) {
+      return 'New registrations are temporarily unavailable. Please try again later.';
+    }
+    if (raw.contains('rate_limit') ||
+        raw.contains('too_many_requests') ||
+        raw.contains('429')) {
+      return 'Too many attempts. Please wait a moment and try again.';
+    }
+    if (raw.contains('network') || raw.contains('SocketException')) {
+      return 'No internet connection. Please check your network and try again.';
+    }
+    return 'Something went wrong. Please try again.';
   }
 
   Future<void> _submit() async {
@@ -57,10 +85,33 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
           'password': _passwordCtrl.text,
         });
       } else {
-        context.go('/home');
+        // Show confirmation message and go to login
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: [
+                const Icon(Icons.mark_email_read_rounded,
+                    color: Colors.white, size: 20),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    'Account created! Check your email (${_emailCtrl.text.trim()}) and click the confirmation link to activate.',
+                    style: const TextStyle(fontFamily: 'Inter', fontSize: 13),
+                  ),
+                ),
+              ],
+            ),
+            backgroundColor: const Color(0xFF0F766E),
+            duration: const Duration(seconds: 6),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12)),
+          ),
+        );
+        context.go('/login');
       }
     } catch (e) {
-      setState(() => _errorMsg = e.toString());
+      setState(() => _errorMsg = _friendlyError(e));
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -195,6 +246,29 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                   validator: (v) {
                     if (v == null || v.isEmpty) return 'Password required';
                     if (v.length < 8) return 'At least 8 characters';
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
+                _label('Confirm Password'),
+                const SizedBox(height: 6),
+                TextFormField(
+                  controller: _confirmCtrl,
+                  obscureText: _confirmObscure,
+                  decoration: InputDecoration(
+                    hintText: 'Re-enter your password',
+                    prefixIcon: const Icon(Icons.lock_outline),
+                    suffixIcon: IconButton(
+                      icon: Icon(_confirmObscure
+                          ? Icons.visibility_off
+                          : Icons.visibility),
+                      onPressed: () =>
+                          setState(() => _confirmObscure = !_confirmObscure),
+                    ),
+                  ),
+                  validator: (v) {
+                    if (v == null || v.isEmpty) return 'Please confirm your password';
+                    if (v != _passwordCtrl.text) return 'Passwords do not match';
                     return null;
                   },
                 ),
