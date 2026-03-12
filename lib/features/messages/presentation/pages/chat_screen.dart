@@ -73,7 +73,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     final currentUserId = ref.read(currentUserIdProvider);
 
     return Scaffold(
-      backgroundColor: AppColors.backgroundLight,
       appBar: AppBar(
         title: Row(
           children: [
@@ -233,7 +232,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
           // Input bar
           Container(
-            color: Colors.white,
+            color: AppColors.surface(context),
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
             child: SafeArea(
               child: Row(

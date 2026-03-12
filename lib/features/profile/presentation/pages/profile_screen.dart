@@ -36,7 +36,6 @@ class ProfileScreen extends ConsumerWidget {
         userId == 'me' || userId == currentUserId;
 
     return Scaffold(
-      backgroundColor: AppColors.backgroundLight,
       appBar: AppBar(
         automaticallyImplyLeading: !isMyProfile,
         title: const Text('Profile'),
@@ -251,9 +250,9 @@ class _ProfileBody extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.surface(context),
             borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: AppColors.borderLight),
+            border: Border.all(color: AppColors.border(context)),
           ),
           child: Column(
             children: [
@@ -294,6 +293,12 @@ class _ProfileBody extends StatelessWidget {
         // ── Reviews ───────────────────────────────────────────────────
         _ReviewsSection(userId: user.id),
         const SizedBox(height: 20),
+
+        // ── Appearance ────────────────────────────────────────────────
+        if (isMyProfile) ...[  
+          const _AppearanceSection(),
+          const SizedBox(height: 20),
+        ],
 
         // ── Sign out (only for own profile) ───────────────────────────
         if (isMyProfile) ...[
@@ -336,9 +341,9 @@ class _StatCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.surface(context),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.borderLight),
+        border: Border.all(color: AppColors.border(context)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -461,9 +466,9 @@ class _ReviewsSection extends ConsumerWidget {
               return Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.surface(context),
                   borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: AppColors.borderLight),
+                  border: Border.all(color: AppColors.border(context)),
                 ),
                 child: const Center(
                   child: Text(
@@ -500,9 +505,9 @@ class _ReviewCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.surface(context),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.borderLight),
+        border: Border.all(color: AppColors.border(context)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -599,6 +604,46 @@ class _ThemeToggleButton extends ConsumerWidget {
         ref.read(themeModeProvider.notifier).state =
             isDark ? ThemeMode.light : ThemeMode.dark;
       },
+    );
+  }
+}
+
+class _AppearanceSection extends ConsumerWidget {
+  const _AppearanceSection();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final mode = ref.watch(themeModeProvider);
+    final isDark = mode == ThemeMode.dark ||
+        (mode == ThemeMode.system &&
+            MediaQuery.platformBrightnessOf(context) == Brightness.dark);
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.surface(context),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: AppColors.border(context)),
+      ),
+      child: SwitchListTile.adaptive(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+        secondary: Icon(
+          isDark ? Icons.dark_mode_rounded : Icons.light_mode_rounded,
+          color: AppColors.primary,
+        ),
+        title: const Text(
+          'Dark Mode',
+          style: TextStyle(
+            fontFamily: 'Inter',
+            fontSize: 15,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        value: isDark,
+        activeTrackColor: AppColors.primary,
+        onChanged: (v) {
+          ref.read(themeModeProvider.notifier).state =
+              v ? ThemeMode.dark : ThemeMode.light;
+        },
+      ),
     );
   }
 }

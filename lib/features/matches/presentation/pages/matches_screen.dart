@@ -33,7 +33,6 @@ class _MatchesScreenState extends ConsumerState<MatchesScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgroundLight,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text('My Matches'),
@@ -161,9 +160,9 @@ class _MatchCard extends ConsumerWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.surface(context),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.borderLight),
+        border: Border.all(color: AppColors.border(context)),
         boxShadow: [
           BoxShadow(
               color: Colors.black.withValues(alpha: 0.03),

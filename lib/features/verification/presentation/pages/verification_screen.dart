@@ -50,7 +50,6 @@ class _VerificationScreenState extends ConsumerState<VerificationScreen> {
     final profileAsync = ref.watch(userProfileProvider('me'));
 
     return Scaffold(
-      backgroundColor: AppColors.backgroundLight,
       appBar: AppBar(
         title: const Text('Verify Your Identity'),
         leading: IconButton(

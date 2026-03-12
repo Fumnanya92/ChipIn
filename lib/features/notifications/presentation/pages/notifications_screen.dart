@@ -83,7 +83,6 @@ class _NotificationsScreenState
     final notificationsAsync = ref.watch(notificationsProvider);
 
     return Scaffold(
-      backgroundColor: AppColors.backgroundLight,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text('Notifications'),

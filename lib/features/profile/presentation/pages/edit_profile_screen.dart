@@ -78,7 +78,6 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     final profileAsync = ref.watch(userProfileProvider('me'));
 
     return Scaffold(
-      backgroundColor: AppColors.backgroundLight,
       appBar: AppBar(
         title: const Text('Edit Profile'),
         leading: IconButton(

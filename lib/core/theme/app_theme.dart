@@ -40,6 +40,29 @@ class AppColors {
   static const Color catGroceriesBg = Color(0xFFF0FDF4);
   static const Color catWorkBg = Color(0xFFFAF5FF);
   static const Color catOtherBg = Color(0xFFF1F5F9);
+
+  // ── Theme-aware surface helpers ───────────────────────────────────────────
+  // Use these instead of hardcoding Colors.white or backgroundLight in screens.
+  static Color surface(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark ? cardDark : surfaceLight;
+
+  static Color scaffoldBg(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark
+          ? backgroundDark
+          : backgroundLight;
+
+  static Color border(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark ? borderDark : borderLight;
+
+  static Color textOn(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark
+          ? const Color(0xFFE2E8F0)
+          : textPrimary;
+
+  static Color textSub(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark
+          ? const Color(0xFF94A3B8)
+          : textSecondary;
 }
 
 class AppTheme {

@@ -54,7 +54,6 @@ class _ListingDetailScreenState extends ConsumerState<ListingDetailScreen> {
     final currentUserId = ref.read(currentUserIdProvider);
 
     return Scaffold(
-      backgroundColor: AppColors.backgroundLight,
       body: listingAsync.when(
         loading: () =>
             const Center(child: CircularProgressIndicator()),
@@ -178,9 +177,9 @@ class _ListingDetailScreenState extends ConsumerState<ListingDetailScreen> {
                       Container(
                         padding: const EdgeInsets.all(14),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: AppColors.surface(context),
                           borderRadius: BorderRadius.circular(14),
-                          border: Border.all(color: AppColors.borderLight),
+                          border: Border.all(color: AppColors.border(context)),
                         ),
                         child: Row(
                           children: [
@@ -283,9 +282,9 @@ class _ListingDetailScreenState extends ConsumerState<ListingDetailScreen> {
                       Container(
                         padding: const EdgeInsets.all(14),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: AppColors.surface(context),
                           borderRadius: BorderRadius.circular(14),
-                          border: Border.all(color: AppColors.borderLight),
+                          border: Border.all(color: AppColors.border(context)),
                         ),
                         child: Row(
                           children: [
@@ -533,10 +532,10 @@ class _CostCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: highlight ? AppColors.primary : Colors.white,
+        color: highlight ? AppColors.primary : AppColors.surface(context),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: highlight ? AppColors.primary : AppColors.borderLight,
+          color: highlight ? AppColors.primary : AppColors.border(context),
         ),
       ),
       child: Column(

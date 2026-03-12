@@ -130,7 +130,6 @@ class _EscrowDepositScreenState extends ConsumerState<EscrowDepositScreen> {
     final allMatchesAsync = ref.watch(sentMatchesProvider);
 
     return Scaffold(
-      backgroundColor: AppColors.backgroundLight,
       appBar: AppBar(
         title: const Text('Escrow Deposit'),
         leading: IconButton(

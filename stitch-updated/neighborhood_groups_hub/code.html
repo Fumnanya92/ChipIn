@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ChipIn - Neighborhood Groups</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#11b4d4",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#0d1117",
+                        "surface-dark": "#161b22",
+                        "border-dark": "#30363d",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<div class="relative flex min-h-screen w-full flex-col max-w-md mx-auto overflow-x-hidden border-x border-transparent dark:border-border-dark">
+<!-- Header -->
+<div class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-10">
+<div class="text-slate-900 dark:text-slate-100 flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-primary/10 cursor-pointer">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 text-center">Neighborhood Groups</h2>
+<div class="flex w-10 items-center justify-end">
+<button class="flex size-10 cursor-pointer items-center justify-center rounded-full bg-primary/10 text-primary transition-colors hover:bg-primary/20">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+</div>
+<!-- Search Bar -->
+<div class="px-4 py-3">
+<label class="flex flex-col min-w-40 h-12 w-full">
+<div class="flex w-full flex-1 items-stretch rounded-xl h-full overflow-hidden bg-slate-200/50 dark:bg-surface-dark border border-transparent dark:border-border-dark focus-within:border-primary">
+<div class="text-slate-500 dark:text-slate-400 flex items-center justify-center pl-4">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden text-slate-900 dark:text-slate-100 focus:outline-0 focus:ring-0 border-none bg-transparent h-full placeholder:text-slate-500 dark:placeholder:text-slate-400 px-4 pl-2 text-base font-normal" placeholder="Search neighborhoods..." value=""/>
+</div>
+</label>
+</div>
+<!-- Categories -->
+<div class="flex gap-3 px-4 py-2 overflow-x-auto no-scrollbar">
+<div class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-primary text-white px-4 cursor-pointer shadow-lg shadow-primary/20">
+<p class="text-sm font-semibold leading-normal">All</p>
+</div>
+<div class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-slate-200/50 dark:bg-surface-dark px-4 text-slate-700 dark:text-slate-300 border border-transparent dark:border-border-dark cursor-pointer">
+<span class="material-symbols-outlined text-sm">domain</span>
+<p class="text-sm font-medium leading-normal">Building splits</p>
+</div>
+<div class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-slate-200/50 dark:bg-surface-dark px-4 text-slate-700 dark:text-slate-300 border border-transparent dark:border-border-dark cursor-pointer">
+<span class="material-symbols-outlined text-sm">share_location</span>
+<p class="text-sm font-medium leading-normal">Street sharing</p>
+</div>
+<div class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-slate-200/50 dark:bg-surface-dark px-4 text-slate-700 dark:text-slate-300 border border-transparent dark:border-border-dark cursor-pointer">
+<span class="material-symbols-outlined text-sm">handshake</span>
+<p class="text-sm font-medium leading-normal">Local services</p>
+</div>
+</div>
+<!-- Joined Groups Section -->
+<div class="px-4 pb-3 pt-6">
+<div class="flex justify-between items-center mb-4">
+<h2 class="text-slate-900 dark:text-slate-100 text-xl font-bold leading-tight tracking-tight">Joined Groups</h2>
+<button class="text-primary text-sm font-semibold">View All</button>
+</div>
+<div class="flex gap-4 overflow-x-auto no-scrollbar pb-2">
+<!-- Joined Group Card 1 -->
+<div class="min-w-[140px] flex flex-col gap-2">
+<div class="relative w-32 h-32 rounded-2xl overflow-hidden group">
+<img alt="Luxury modern apartment building exterior" class="w-full h-full object-cover" data-alt="Modern apartment building facade at sunset" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB8HzR-WSBvLcWW4eadFns_olCg-astzecrFg3xo48ub1mRcQzkDPRKNST65mgwfZTLDnigLC6FFBszJ1qVdiwHkDBlO5-xvCzu6jzn302COOogS0qSuIFevQtJzAG1gaE7ClS7E8LrZ_j1EJmcZN175hOz3ePNXRUvPT-iqgISQjEfSbKmilUKHH0QCVFJnkq8kZGG3cFibgGD6HTFfnuxaWMzGw8qBP1bxaz4msKQksT-0zkTgYMFkBca0TRP5G_eDifUmr9nI7Ly"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute bottom-2 left-2 flex -space-x-2">
+<div class="w-6 h-6 rounded-full border-2 border-surface-dark bg-slate-400"></div>
+<div class="w-6 h-6 rounded-full border-2 border-surface-dark bg-slate-500"></div>
+</div>
+</div>
+<div>
+<p class="text-sm font-bold text-slate-900 dark:text-slate-100 truncate">The Zenith</p>
+<p class="text-[10px] text-primary font-medium">Active now</p>
+</div>
+</div>
+<!-- Joined Group Card 2 -->
+<div class="min-w-[140px] flex flex-col gap-2">
+<div class="relative w-32 h-32 rounded-2xl overflow-hidden">
+<img alt="Suburban street with trees and houses" class="w-full h-full object-cover" data-alt="Leafy suburban residential street with houses" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjb4qJpbjvXV2rN8HwRDZWq18xrQ8GbGH-NGh80tOtKmGDeN33c9s13p-W3WkRDO5IluXa-2pw761dos2sdIB6qz1Kiz9NPAD_Zh3OKrQxa2AbN9iGWF8My7lj5jORuzfWz0dOMUvGI8q_foq50DftQS9KLHqZuwOb0zWUNx8KeqWK3GerWmHt-bJBe8tJQG_3maxocJTp8gZPkxZDSGQpY7dlNudh207ZDLy6HbIN7CSGc9OwD9NEsHAOxqSjn72Qw4QwlyHs5HHG"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute bottom-2 left-2 flex -space-x-2">
+<div class="w-6 h-6 rounded-full border-2 border-surface-dark bg-slate-400"></div>
+<div class="w-6 h-6 rounded-full border-2 border-surface-dark bg-slate-500"></div>
+<div class="w-6 h-6 rounded-full border-2 border-surface-dark bg-primary flex items-center justify-center text-[8px] text-white font-bold">+12</div>
+</div>
+</div>
+<div>
+<p class="text-sm font-bold text-slate-900 dark:text-slate-100 truncate">Oak Ridge Lane</p>
+<p class="text-[10px] text-slate-500 dark:text-slate-400">2h ago</p>
+</div>
+</div>
+<!-- Joined Group Card 3 -->
+<div class="min-w-[140px] flex flex-col gap-2">
+<div class="relative w-32 h-32 rounded-2xl overflow-hidden">
+<img alt="Small cozy community park" class="w-full h-full object-cover" data-alt="Small neighborhood garden and community area" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFmb6DbFa5meNoY9-um-b-ImkDke56TH-Kz7sin0jipPpHcYXPfyBJrExABHzqE6FyAC0_R7emv07KIe--wzGHCKmDYzhMetDxehFkVlAtNE6LZ82zCoha2YcV-r1VJxruG_mjYcfUuPyhbSote8GCz_3Er92Opw3kLnwPgUB1-W-GSWkZ0BIsJUW030GCaDbQYPlpKc5z1NYYJMQD4-ujawDyGWx6FEm7b6FFjMZHpxK4ri7YQEsJzQeuwOLcPtqs0HuvsvgGJl4k"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute bottom-2 left-2 flex -space-x-2">
+<div class="w-6 h-6 rounded-full border-2 border-surface-dark bg-slate-400"></div>
+</div>
+</div>
+<div>
+<p class="text-sm font-bold text-slate-900 dark:text-slate-100 truncate">Green Park Hub</p>
+<p class="text-[10px] text-slate-500 dark:text-slate-400">Yesterday</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Recommended Nearby Section -->
+<div class="px-4 py-4 flex-1">
+<h2 class="text-slate-900 dark:text-slate-100 text-xl font-bold leading-tight tracking-tight mb-4">Recommended Nearby</h2>
+<div class="flex flex-col gap-4">
+<!-- Group Card 1 -->
+<div class="flex flex-col rounded-2xl bg-slate-200/40 dark:bg-surface-dark border border-transparent dark:border-border-dark overflow-hidden transition-all hover:border-primary/50">
+<div class="h-32 w-full relative">
+<img alt="Eco friendly modern neighborhood" class="w-full h-full object-cover" data-alt="Modern eco-friendly residential development with grass" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNzcuBTvkUVzobG3xtWKq60buhH8GRSWfq-C-tGPNxLDSNgxF9uk-0HeREwILIGblzNGpEfZ8Dz3Q8B988zS9KkjLKlaxasrkt8_kro33tmeIK2tKQGg9iqZlEspi86Ye9r05sV2pTz50q8U_ROYAWAsb-d0nn8p0ZJW7JRFBGXoG2U-EfS6Vp2fESSbqJlsJqzkirc7jxtj8ZOIgD9-KrK-wVy_27xTLAUud6H6x6XpkhbZBsird9v6Xc-My763c0PSjqsTtj1a6d"/>
+<div class="absolute top-3 right-3 bg-primary text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider">Top Rated</div>
+</div>
+<div class="p-4">
+<div class="flex justify-between items-start mb-2">
+<div>
+<h3 class="font-bold text-slate-900 dark:text-slate-100">Riverway Estates</h3>
+<p class="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">location_on</span> 0.4 miles away
+                                </p>
+</div>
+<button class="bg-primary text-white px-4 py-1.5 rounded-full text-xs font-bold hover:brightness-110">Join</button>
+</div>
+<div class="flex items-center justify-between mt-4 pt-4 border-t border-slate-300 dark:border-border-dark/50">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-1 text-slate-600 dark:text-slate-400">
+<span class="material-symbols-outlined text-base material-symbols-fill text-primary">group</span>
+<span class="text-xs font-semibold">142 members</span>
+</div>
+<div class="flex items-center gap-1 text-slate-600 dark:text-slate-400">
+<span class="material-symbols-outlined text-base">forum</span>
+<span class="text-xs font-semibold">24 new posts</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Group Card 2 -->
+<div class="flex flex-col rounded-2xl bg-slate-200/40 dark:bg-surface-dark border border-transparent dark:border-border-dark overflow-hidden transition-all hover:border-primary/50">
+<div class="h-32 w-full relative">
+<img alt="High rise business and residential district" class="w-80% h-full object-cover w-full" data-alt="Glass skyscrapers in a dense urban neighborhood" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUNBMOkxRNxPOdojUUtT0TkqrzTFHK_ATYcXx_hS0Lt8FSIu9dvHo0lFmsHVSilVPmZJzO6y8vfWNFSV80qJ-SIBnJ1gVAREs7HSEexgtGiRBJdN97U9mFUK11_1U4iIjkDpl6Z7Wj0COzWzD8m7uZWcgZevXuLDfKah_VP0ejGabZ4NZMhIS3esFDDRVPbr1pCvAtfM6qN1F6m2Z-KZqqTeTz5_1-xAohDU7qq8lwuoXBjA7wog3ev4HmG26BJW7yKnWz5JxcJdHd"/>
+</div>
+<div class="p-4">
+<div class="flex justify-between items-start mb-2">
+<div>
+<h3 class="font-bold text-slate-900 dark:text-slate-100">Skyline Plaza</h3>
+<p class="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">location_on</span> 1.2 miles away
+                                </p>
+</div>
+<button class="bg-primary text-white px-4 py-1.5 rounded-full text-xs font-bold hover:brightness-110">Join</button>
+</div>
+<div class="flex items-center justify-between mt-4 pt-4 border-t border-slate-300 dark:border-border-dark/50">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-1 text-slate-600 dark:text-slate-400">
+<span class="material-symbols-outlined text-base material-symbols-fill text-primary">group</span>
+<span class="text-xs font-semibold">310 members</span>
+</div>
+<div class="flex items-center gap-1 text-slate-600 dark:text-slate-400">
+<span class="material-symbols-outlined text-base">forum</span>
+<span class="text-xs font-semibold">12 new posts</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Spacer for floating action button/nav -->
+<div class="h-24"></div>
+</div>
+<!-- Floating Create Button -->
+<div class="fixed bottom-24 right-6 z-20">
+<button class="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-white shadow-xl shadow-primary/40 hover:scale-105 transition-transform">
+<span class="material-symbols-outlined scale-125">add</span>
+</button>
+</div>
+<!-- Bottom Navigation Bar -->
+<div class="fixed bottom-0 w-full max-w-md bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-t border-slate-200 dark:border-border-dark pb-6 pt-2">
+<div class="flex gap-2 px-4">
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-500 dark:text-slate-400" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined">home</span>
+</div>
+<p class="text-[10px] font-medium leading-normal tracking-wide">Home</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-primary" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined material-symbols-fill">groups</span>
+</div>
+<p class="text-[10px] font-bold leading-normal tracking-wide">Groups</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-500 dark:text-slate-400" href="#">
+<div class="flex h-8 items-center justify-center relative">
+<span class="material-symbols-outlined">notifications</span>
+<div class="absolute top-1 right-1 size-2 rounded-full bg-primary border-2 border-background-dark"></div>
+</div>
+<p class="text-[10px] font-medium leading-normal tracking-wide">Activity</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-500 dark:text-slate-400" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined">person</span>
+</div>
+<p class="text-[10px] font-medium leading-normal tracking-wide">Profile</p>
+</a>
+</div>
+</div>
+</div>
+</body></html>

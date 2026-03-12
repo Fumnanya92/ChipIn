@@ -34,7 +34,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final user = ref.watch(authNotifierProvider).value;
 
     return Scaffold(
-      backgroundColor: AppColors.backgroundLight,
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
@@ -85,9 +84,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         width: 40,
                         height: 40,
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: AppColors.surface(context),
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: AppColors.borderLight),
+                          border: Border.all(color: AppColors.border(context)),
                         ),
                         child: const Icon(Icons.notifications_outlined,
                             size: 22, color: AppColors.textPrimary),
@@ -107,9 +106,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   child: Container(
                     height: 48,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.surface(context),
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: AppColors.borderLight),
+                      border: Border.all(color: AppColors.border(context)),
                     ),
                     padding: const EdgeInsets.symmetric(horizontal: 14),
                     child: Row(
@@ -392,9 +391,9 @@ class ListingCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.surface(context),
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.borderLight),
+          border: Border.all(color: AppColors.border(context)),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.04),

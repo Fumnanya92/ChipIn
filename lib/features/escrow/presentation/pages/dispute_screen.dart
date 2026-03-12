@@ -75,7 +75,6 @@ class _DisputeScreenState extends ConsumerState<DisputeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgroundLight,
       appBar: AppBar(
         title: const Text('Raise a Dispute'),
         leading: IconButton(

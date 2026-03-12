@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#11b4d4",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#0a1014", // Deep charcoal as requested
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .glass-card {
+            background: rgba(17, 180, 212, 0.05);
+            border: 1px solid rgba(17, 180, 212, 0.15);
+            backdrop-filter: blur(8px);
+        }
+        .glow-accent {
+            box-shadow: 0 0 15px rgba(17, 180, 212, 0.3);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-dark text-slate-100 font-display">
+<div class="relative flex h-screen max-w-md mx-auto flex-col bg-background-dark overflow-hidden border-x border-slate-800/50">
+<!-- Header -->
+<header class="flex items-center justify-between p-4 pt-6">
+<div class="flex items-center gap-3">
+<div class="bg-primary/20 p-2 rounded-lg">
+<span class="material-symbols-outlined text-primary text-2xl">auto_awesome</span>
+</div>
+<h1 class="text-xl font-bold tracking-tight text-slate-100">Smart Match</h1>
+</div>
+<button class="p-2 rounded-full hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-slate-300">notifications</span>
+</button>
+</header>
+<!-- Main Content Scroll Area -->
+<main class="flex-1 overflow-y-auto px-4 pb-24">
+<!-- Logic Section -->
+<section class="mt-4 mb-8">
+<h2 class="text-lg font-semibold text-slate-100 mb-1">Why these fits</h2>
+<p class="text-sm text-slate-400 leading-relaxed">
+                    Our AI analyzed your recent spending and social graph to find group splits that align with your lifestyle and trusted circles.
+                </p>
+</section>
+<!-- Recommendations -->
+<div class="space-y-6">
+<!-- Card 1: Premium Travel -->
+<div class="glass-card rounded-xl overflow-hidden group">
+<div class="relative h-48 w-full bg-slate-800">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Luxury alpine resort view with mountains" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBat-tlcdvsKlaGpiXpWhJvKa83lKKfCRsSl3rvJmnm7PAJvnWVh8i5_WelWFwJM1LkFUmOZEsMPT-fq4jgvqbYsq8pZe2dp7ofjYi5aWjJLsWp-U9b8zsA6Run6arnpHO9nol8ztfyufYqvMYuYiXoz_CvXrH6X1V2zjtjkaFoZ_TpxZm0lLVAHLANhNKlTU94_8YJZLx1LnQD4oU4hymiDp1RDFTxXfLCmLmfl4j7IDxxztN8oxOt6yQ26fE34GhKGDQCjhlFhAhZ')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark via-transparent to-transparent"></div>
+<div class="absolute top-3 left-3 bg-primary px-2 py-1 rounded text-[10px] font-bold tracking-wider text-background-dark glow-accent">
+                            98% MATCH
+                        </div>
+</div>
+<div class="p-4">
+<div class="flex justify-between items-start mb-2">
+<div>
+<h3 class="text-lg font-bold text-slate-100">Premium Travel</h3>
+<div class="flex items-center gap-1.5 mt-1">
+<span class="material-symbols-outlined text-[14px] text-primary">history</span>
+<p class="text-xs text-primary font-medium">Similar to your past activity</p>
+</div>
+</div>
+</div>
+<p class="text-sm text-slate-400 mb-4 line-clamp-2">Luxury getaway to the Alps with verified high-tier members. Premium split for accommodation and transport.</p>
+<div class="flex items-center justify-between">
+<div class="flex -space-x-2">
+<div class="w-7 h-7 rounded-full border-2 border-background-dark bg-slate-700 overflow-hidden">
+<img alt="Member" data-alt="User profile avatar small" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwRZZBELVLeffpD6w9bvxdf7aLvPN05yogwT17wcd1sONWfiKO-Mq7CigsKH5mB00iZxcSYfeCPYz3lGN6UL4Sn2o2MP3Yzwr7UweHj_owGXjNCa5x7Kyk3iAOKrVWgxGdJcK7hyXqH6ad3ZNy8s67wbwQd8FyYf9r7VHblUlyEYEtZYEdcxlrPdGkXBmrijdphbKT2osQzHOBj4y7xFwODnZM90ZQuZLmn0DjJLuy0t2wUXNEt7XNUIzpmPK1RQYaF1Rs-4_s5lRo"/>
+</div>
+<div class="w-7 h-7 rounded-full border-2 border-background-dark bg-slate-700 overflow-hidden">
+<img alt="Member" data-alt="User profile avatar small" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZGNzfJNJA7NIwDWzlmHkRm1kesISpmmn5XL18XuALEVIE3fUsMWN-MDpU4oV6Ic_HQ4zbhRJacuKynMy5PjHMCJia1SvQ4FfnrY_MOC_EiJF2RWyjn6MThZdY3vNrUbJoXg1yR9Z3hgT7mgsctF8S3njrXrrgTPYjIKzK-y0rifZENbppysYBUB6SS6BkVDZp4PHQ8ziY0PxCG8kydc26dXNl4u4to2qAqOENDvCRoA8S8BzAa8B4ZXS6BDkmXWm25r4y45ArlqH-"/>
+</div>
+<div class="w-7 h-7 rounded-full border-2 border-background-dark bg-slate-600 flex items-center justify-center text-[10px] text-white">
+                                    +4
+                                </div>
+</div>
+<button class="bg-primary hover:bg-primary/90 text-background-dark px-4 py-2 rounded-lg text-sm font-bold transition-all transform active:scale-95">
+                                View Match
+                            </button>
+</div>
+</div>
+</div>
+<!-- Card 2: Bulk Grocery -->
+<div class="glass-card rounded-xl overflow-hidden">
+<div class="relative h-48 w-full bg-slate-800">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Aisle of fresh organic groceries" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAmy-EGUUPUN6AXGLuucLCpoP-oG2CQYTPa6syOVXkcb3RD-ikOve6bCvoUPK0Zs_6nLE7VOfBbV26g78wZH5imCLYDZCw_i4e4CuBjEtu72FrxicqeBD36NJ_PalhMZHwb-8nAukn7oRegFTMgzH72t8BnF_6Ns9JmK4lyXzXPivZkY0zkx4ay_bhGHASRejMPHluLedvAWWY7BA9yWVXdC7ufIMs8XtqjuZhtmU4QQFxTQzu4SBzyg_b1goqrK_zvDtQJnZGrc794')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark via-transparent to-transparent"></div>
+<div class="absolute top-3 left-3 bg-primary px-2 py-1 rounded text-[10px] font-bold tracking-wider text-background-dark">
+                            92% MATCH
+                        </div>
+</div>
+<div class="p-4">
+<div class="flex justify-between items-start mb-2">
+<div>
+<h3 class="text-lg font-bold text-slate-100">Bulk Grocery Run</h3>
+<div class="flex items-center gap-1.5 mt-1">
+<span class="material-symbols-outlined text-[14px] text-primary">verified_user</span>
+<p class="text-xs text-primary font-medium">Nearby &amp; Trusted</p>
+</div>
+</div>
+</div>
+<p class="text-sm text-slate-400 mb-4 line-clamp-2">Weekly organic essentials split at Whole Foods. High savings for 3+ participants.</p>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400 text-sm">location_on</span>
+<span class="text-xs text-slate-400">0.4 miles away</span>
+</div>
+<button class="border border-primary/40 hover:bg-primary/10 text-primary px-4 py-2 rounded-lg text-sm font-bold transition-all transform active:scale-95">
+                                Quick Join
+                            </button>
+</div>
+</div>
+</div>
+<!-- Card 3: Cloud Subscription -->
+<div class="glass-card rounded-xl overflow-hidden mb-8">
+<div class="p-5 flex items-center gap-4">
+<div class="w-16 h-16 rounded-xl bg-primary/10 flex items-center justify-center shrink-0 border border-primary/20">
+<span class="material-symbols-outlined text-3xl text-primary">cloud</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-center">
+<h3 class="font-bold text-slate-100">Dev Tools Plus</h3>
+<span class="text-[10px] font-bold text-primary bg-primary/10 px-1.5 py-0.5 rounded">85% MATCH</span>
+</div>
+<p class="text-xs text-slate-400 mt-1">Shared enterprise subscription for AI tools.</p>
+<div class="mt-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-[14px] text-primary">group</span>
+<p class="text-[10px] text-slate-500">3 slots remaining</p>
+</div>
+</div>
+<button class="material-symbols-outlined text-slate-400">chevron_right</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation -->
+<nav class="absolute bottom-0 left-0 right-0 bg-background-dark/80 backdrop-blur-xl border-t border-slate-800/50 pb-6 pt-2 px-4">
+<div class="flex justify-between items-center max-w-sm mx-auto">
+<a class="flex flex-col items-center gap-1 group" href="#">
+<span class="material-symbols-outlined text-slate-500 group-hover:text-primary transition-colors">home</span>
+<span class="text-[10px] text-slate-500 group-hover:text-primary font-medium">Home</span>
+</a>
+<a class="flex flex-col items-center gap-1 group" href="#">
+<span class="material-symbols-outlined text-slate-500 group-hover:text-primary transition-colors">explore</span>
+<span class="text-[10px] text-slate-500 group-hover:text-primary font-medium">Explore</span>
+</a>
+<a class="flex flex-col items-center gap-1" href="#">
+<div class="bg-primary w-12 h-12 rounded-full flex items-center justify-center -mt-8 shadow-lg shadow-primary/20 glow-accent transform active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-background-dark font-bold">add</span>
+</div>
+<span class="text-[10px] text-slate-500 font-medium">Post</span>
+</a>
+<a class="flex flex-col items-center gap-1 group" href="#">
+<span class="material-symbols-outlined text-primary fill-[1]">handshake</span>
+<span class="text-[10px] text-primary font-medium">Matches</span>
+</a>
+<a class="flex flex-col items-center gap-1 group" href="#">
+<span class="material-symbols-outlined text-slate-500 group-hover:text-primary transition-colors">person</span>
+<span class="text-[10px] text-slate-500 group-hover:text-primary font-medium">Profile</span>
+</a>
+</div>
+</nav>
+</div>
+</body></html>

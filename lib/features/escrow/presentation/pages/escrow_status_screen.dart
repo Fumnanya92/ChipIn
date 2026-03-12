@@ -43,11 +43,12 @@ class _EscrowStatusScreenState extends ConsumerState<EscrowStatusScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Split confirmed! Funds released. Please leave a review.'),
+            content: Text('Split confirmed! Funds released.'),
             backgroundColor: AppColors.success,
           ),
         );
         context.pop();
+        context.push('/review/${widget.matchId}');
       }
     } catch (e) {
       if (mounted) {
@@ -67,7 +68,6 @@ class _EscrowStatusScreenState extends ConsumerState<EscrowStatusScreen> {
     final fmt = NumberFormat.currency(symbol: '\$');
 
     return Scaffold(
-      backgroundColor: AppColors.backgroundLight,
       appBar: AppBar(
         title: const Text('Escrow Status'),
         leading: IconButton(

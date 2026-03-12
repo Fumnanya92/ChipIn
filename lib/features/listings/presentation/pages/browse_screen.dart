@@ -67,7 +67,6 @@ class _BrowseScreenState extends ConsumerState<BrowseScreen> {
     final listingsAsync = ref.watch(listingsProvider);
 
     return Scaffold(
-      backgroundColor: AppColors.backgroundLight,
       appBar: AppBar(
         title: const Text('Explore'),
         automaticallyImplyLeading: false,

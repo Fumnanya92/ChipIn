@@ -6,6 +6,7 @@ import 'package:chipin/features/auth/presentation/providers/auth_provider.dart';
 import 'package:chipin/features/escrow/presentation/pages/dispute_screen.dart';
 import 'package:chipin/features/escrow/presentation/pages/escrow_deposit_screen.dart';
 import 'package:chipin/features/escrow/presentation/pages/escrow_status_screen.dart';
+import 'package:chipin/features/reviews/presentation/pages/submit_review_screen.dart';
 import 'package:chipin/features/home/presentation/pages/home_screen.dart';
 import 'package:chipin/features/listings/presentation/pages/browse_screen.dart';
 import 'package:chipin/features/listings/presentation/pages/listing_detail_screen.dart';
@@ -149,6 +150,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/dispute/:matchId',
         builder: (context, state) =>
             DisputeScreen(matchId: state.pathParameters['matchId']!),
+      ),
+      GoRoute(
+        path: '/review/:matchId',
+        builder: (context, state) =>
+            SubmitReviewScreen(matchId: state.pathParameters['matchId']!),
       ),
 
       // ── Main shell with persistent bottom nav ─────────────────────────────
