@@ -36,6 +36,13 @@ class _MatchesScreenState extends ConsumerState<MatchesScreen>
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text('My Matches'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.auto_awesome_rounded),
+            tooltip: 'Smart Match',
+            onPressed: () => context.push('/smart-match'),
+          ),
+        ],
         bottom: TabBar(
           controller: _tabController,
           labelColor: AppColors.primary,

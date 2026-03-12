@@ -7,6 +7,9 @@ import 'package:chipin/features/escrow/presentation/pages/dispute_screen.dart';
 import 'package:chipin/features/escrow/presentation/pages/escrow_deposit_screen.dart';
 import 'package:chipin/features/escrow/presentation/pages/escrow_status_screen.dart';
 import 'package:chipin/features/reviews/presentation/pages/submit_review_screen.dart';
+import 'package:chipin/features/matches/presentation/pages/smart_match_screen.dart';
+import 'package:chipin/features/groups/presentation/pages/neighborhood_groups_screen.dart';
+import 'package:chipin/features/home/presentation/pages/latest_feed_screen.dart';
 import 'package:chipin/features/home/presentation/pages/home_screen.dart';
 import 'package:chipin/features/listings/presentation/pages/browse_screen.dart';
 import 'package:chipin/features/listings/presentation/pages/listing_detail_screen.dart';
@@ -155,6 +158,18 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/review/:matchId',
         builder: (context, state) =>
             SubmitReviewScreen(matchId: state.pathParameters['matchId']!),
+      ),
+      GoRoute(
+        path: '/smart-match',
+        builder: (context, state) => const SmartMatchScreen(),
+      ),
+      GoRoute(
+        path: '/groups',
+        builder: (context, state) => const NeighborhoodGroupsScreen(),
+      ),
+      GoRoute(
+        path: '/latest-feed',
+        builder: (context, state) => const LatestFeedScreen(),
       ),
 
       // ── Main shell with persistent bottom nav ─────────────────────────────

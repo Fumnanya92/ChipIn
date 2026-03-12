@@ -222,6 +222,42 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
             ),
 
+            // ── Quick access banners ────────────────────────────────────────
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: 96,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.fromLTRB(20, 14, 20, 0),
+                  children: [
+                    _QuickBanner(
+                      icon: Icons.auto_awesome_rounded,
+                      label: 'Smart Match',
+                      sublabel: 'AI-curated splits',
+                      gradient: const [Color(0xFF11B4D4), Color(0xFF0D8FAB)],
+                      onTap: () => context.push('/smart-match'),
+                    ),
+                    const SizedBox(width: 12),
+                    _QuickBanner(
+                      icon: Icons.group_work_rounded,
+                      label: 'Neighborhoods',
+                      sublabel: 'Your local groups',
+                      gradient: const [Color(0xFF1E3A50), Color(0xFF162A38)],
+                      onTap: () => context.push('/groups'),
+                    ),
+                    const SizedBox(width: 12),
+                    _QuickBanner(
+                      icon: Icons.dynamic_feed_rounded,
+                      label: 'Latest Feed',
+                      sublabel: 'New opportunities',
+                      gradient: const [Color(0xFF1A3B2E), Color(0xFF122A1F)],
+                      onTap: () => context.push('/latest-feed'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
             // ── Featured Splits header ─────────────────────────────────────
             SliverToBoxAdapter(
               child: Padding(
@@ -644,6 +680,84 @@ class _ShimmerCard extends StatelessWidget {
             color: Colors.white,
             borderRadius: BorderRadius.circular(16),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+// ── Quick Access Banner ───────────────────────────────────────────────────────
+
+class _QuickBanner extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final String sublabel;
+  final List<Color> gradient;
+  final VoidCallback onTap;
+
+  const _QuickBanner({
+    required this.icon,
+    required this.label,
+    required this.sublabel,
+    required this.gradient,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 148,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: gradient,
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(
+            color: gradient.first.withValues(alpha: 0.4),
+          ),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(icon, size: 18, color: Colors.white),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    label,
+                    style: const TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                    ),
+                  ),
+                  Text(
+                    sublabel,
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 10,
+                      color: Colors.white.withValues(alpha: 0.7),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
