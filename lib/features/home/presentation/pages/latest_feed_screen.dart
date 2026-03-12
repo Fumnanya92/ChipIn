@@ -1,4 +1,5 @@
 import 'package:chipin/core/theme/app_theme.dart';
+import 'package:chipin/features/auth/presentation/providers/auth_provider.dart';
 import 'package:chipin/features/listings/presentation/providers/listings_provider.dart';
 import 'package:chipin/shared/models/listing_model.dart';
 import 'package:flutter/material.dart';
@@ -370,16 +371,16 @@ class _StatItem extends StatelessWidget {
 
 // ── Feed Card ─────────────────────────────────────────────────────────────────
 
-class _FeedCard extends StatefulWidget {
+class _FeedCard extends ConsumerStatefulWidget {
   final ListingModel listing;
   final bool isDark;
   const _FeedCard({required this.listing, required this.isDark});
 
   @override
-  State<_FeedCard> createState() => _FeedCardState();
+  ConsumerState<_FeedCard> createState() => _FeedCardState();
 }
 
-class _FeedCardState extends State<_FeedCard> {
+class _FeedCardState extends ConsumerState<_FeedCard> {
   bool _liked = false;
   bool _bookmarked = false;
 
@@ -661,7 +662,14 @@ class _FeedCardState extends State<_FeedCard> {
               width: double.infinity,
               height: 46,
               child: ElevatedButton.icon(
-                onPressed: () => context.push('/listing/${l.id}'),
+                onPressed: () {
+                  final userId = ref.read(currentUserIdProvider);
+                  if (userId == null) {
+                    context.push('/login');
+                  } else {
+                    context.push('/listing/${l.id}');
+                  }
+                },
                 icon: const Icon(Icons.handshake_rounded, size: 18),
                 label: const Text('Request to Split'),
                 style: ElevatedButton.styleFrom(

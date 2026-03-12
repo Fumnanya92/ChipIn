@@ -44,8 +44,9 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           loc == '/otp' ||
           loc == '/onboarding' ||
           loc == '/splash';
+      final isPublicRoute = loc == '/latest-feed';
 
-      if (!isAuthenticated && !isAuthRoute) {
+      if (!isAuthenticated && !isAuthRoute && !isPublicRoute) {
         return '/login';
       }
       return null;
