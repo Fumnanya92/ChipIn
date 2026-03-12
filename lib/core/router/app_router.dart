@@ -15,6 +15,7 @@ import 'package:chipin/features/listings/presentation/pages/browse_screen.dart';
 import 'package:chipin/features/listings/presentation/pages/listing_detail_screen.dart';
 import 'package:chipin/features/matches/presentation/pages/matches_screen.dart';
 import 'package:chipin/features/messages/presentation/pages/chat_screen.dart';
+import 'package:chipin/features/messages/presentation/pages/messages_inbox_screen.dart';
 import 'package:chipin/features/notifications/presentation/pages/notifications_screen.dart';
 import 'package:chipin/features/onboarding/presentation/pages/onboarding_screen.dart';
 import 'package:chipin/features/post/presentation/pages/post_category_screen.dart';
@@ -196,6 +197,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             GoRoute(
               path: '/matches',
               builder: (context, state) => const MatchesScreen(),
+            ),
+          ]),
+          StatefulShellBranch(routes: [
+            GoRoute(
+              path: '/messages',
+              builder: (context, state) => const MessagesInboxScreen(),
             ),
           ]),
           StatefulShellBranch(routes: [

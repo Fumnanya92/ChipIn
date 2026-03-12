@@ -261,7 +261,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                               color: AppColors.primary, width: 1.5),
                         ),
                         filled: true,
-                        fillColor: AppColors.backgroundLight,
+                        fillColor: AppColors.surface(context),
                       ),
                       onSubmitted: (_) => _send(),
                     ),

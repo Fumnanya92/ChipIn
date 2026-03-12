@@ -8,8 +8,11 @@ class AppShell extends StatelessWidget {
   const AppShell({required this.shell, super.key});
 
   // Map shell branch index → bottom nav row index (skip index 2 = FAB slot)
+  // Branches: 0=Home, 1=Explore, 2=Matches, 3=Messages, 4=Profile
+  // NavBar:   0=Home, 1=Explore, 2=FAB,     3=Matches, 4=Messages, 5=Profile
   int get _navIndex {
-    return shell.currentIndex >= 2 ? shell.currentIndex + 1 : shell.currentIndex;
+    if (shell.currentIndex >= 2) return shell.currentIndex + 1;
+    return shell.currentIndex;
   }
 
   void _handleNav(BuildContext context, int tapIndex) {
@@ -115,12 +118,20 @@ class AppShell extends StatelessWidget {
                 onTap: () => _handleNav(context, 3),
               ),
               _NavItem(
-                icon: Icons.person_rounded,
-                label: 'Profile',
+                icon: Icons.chat_bubble_rounded,
+                label: 'Messages',
                 active: _navIndex == 4,
                 activeColor: activeColor,
                 inactiveColor: inactiveColor,
                 onTap: () => _handleNav(context, 4),
+              ),
+              _NavItem(
+                icon: Icons.person_rounded,
+                label: 'Profile',
+                active: _navIndex == 5,
+                activeColor: activeColor,
+                inactiveColor: inactiveColor,
+                onTap: () => _handleNav(context, 5),
               ),
             ],
           ),

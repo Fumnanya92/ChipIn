@@ -123,11 +123,10 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text('Verify Phone'),
-        backgroundColor: Colors.white,
         elevation: 0,
       ),
       body: Padding(
@@ -174,14 +173,14 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                       FilteringTextInputFormatter.digitsOnly,
                       LengthLimitingTextInputFormatter(1),
                     ],
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w700,
-                      color: AppColors.textPrimary,
+                      color: isDark ? const Color(0xFFF1F5F9) : AppColors.textPrimary,
                     ),
                     decoration: InputDecoration(
                       filled: true,
-                      fillColor: const Color(0xFFF1F5F9),
+                      fillColor: isDark ? const Color(0xFF1E293B) : const Color(0xFFF1F5F9),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide.none,
