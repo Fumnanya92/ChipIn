@@ -1,6 +1,8 @@
 import 'package:chipin/core/config/app_constants.dart';
+import 'package:chipin/core/config/firebase_options.dart';
 import 'package:chipin/core/router/app_router.dart';
 import 'package:chipin/core/theme/app_theme.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -11,6 +13,8 @@ final themeModeProvider = StateProvider<ThemeMode>((ref) => ThemeMode.system);
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   await Supabase.initialize(
     url: AppConstants.supabaseUrl,

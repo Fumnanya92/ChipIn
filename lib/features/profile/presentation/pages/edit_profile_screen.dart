@@ -3,6 +3,7 @@ import 'package:chipin/core/theme/app_theme.dart';
 import 'package:chipin/features/auth/presentation/providers/auth_provider.dart';
 import 'package:chipin/features/profile/presentation/providers/profile_provider.dart';
 import 'package:chipin/shared/models/user_model.dart';
+import 'package:chipin/shared/widgets/error_retry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -81,7 +82,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                 ),
               );
           newAvatarUrl =
-              supabase.storage.from('avatars').getPublicUrl(storagePath);
+              '${supabase.storage.from('avatars').getPublicUrl(storagePath)}?t=${DateTime.now().millisecondsSinceEpoch}';
         }
       }
 
@@ -93,7 +94,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
           );
       // Refresh both the auth state and the profile cache so changes show immediately.
       ref.invalidate(userProfileProvider('me'));
-      await ref.read(authNotifierProvider.notifier).build();
+      ref.invalidate(authNotifierProvider);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Profile updated!')),
@@ -149,7 +150,10 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
       ),
       body: profileAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text('Error: $e')),
+        error: (e, _) => ErrorRetry(
+          error: e,
+          onRetry: () => ref.invalidate(userProfileProvider('me')),
+        ),
         data: (profile) => _buildForm(profile),
       ),
     );
@@ -214,7 +218,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
             const SizedBox(height: 6),
             TextFormField(
               controller: _nameCtrl,
-              decoration: _inputDecor('Your full name'),
+              decoration: _inputDecor(context, 'Your full name'),
               textCapitalization: TextCapitalization.words,
               validator: (v) =>
                   (v == null || v.trim().isEmpty) ? 'Name is required' : null,
@@ -225,7 +229,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
             const SizedBox(height: 6),
             TextFormField(
               controller: _bioCtrl,
-              decoration: _inputDecor('A short bio about yourself'),
+              decoration: _inputDecor(context, 'A short bio about yourself'),
               maxLines: 3,
               maxLength: 160,
             ),
@@ -235,7 +239,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
             const SizedBox(height: 6),
             TextFormField(
               controller: _locationCtrl,
-              decoration: _inputDecor('City, Country (optional)'),
+              decoration: _inputDecor(context, 'City, Country (optional)'),
             ),
             const SizedBox(height: 32),
 
@@ -255,21 +259,19 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     );
   }
 
-  static InputDecoration _inputDecor(String hint) {
+  InputDecoration _inputDecor(BuildContext context, String hint) {
     return InputDecoration(
       hintText: hint,
       hintStyle: const TextStyle(color: AppColors.textMuted),
-      filled: true,
-      fillColor: Colors.white,
       contentPadding:
           const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: AppColors.borderLight),
+        borderSide: BorderSide(color: AppColors.border(context)),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: AppColors.borderLight),
+        borderSide: BorderSide(color: AppColors.border(context)),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
@@ -287,11 +289,11 @@ class _FieldLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: const TextStyle(
+      style: TextStyle(
         fontFamily: 'Inter',
         fontSize: 13,
         fontWeight: FontWeight.w600,
-        color: AppColors.textPrimary,
+        color: AppColors.isDark(context) ? AppColors.textDark : AppColors.textPrimary,
       ),
     );
   }

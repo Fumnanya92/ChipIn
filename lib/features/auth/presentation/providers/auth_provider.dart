@@ -14,6 +14,8 @@ final authStateProvider = StreamProvider<User?>((ref) {
 });
 
 final currentUserIdProvider = Provider<String?>((ref) {
+  // Watch authStateProvider so this rebuilds when session is restored/changed
+  ref.watch(authStateProvider);
   return ref.watch(supabaseClientProvider).auth.currentUser?.id;
 });
 
@@ -110,14 +112,18 @@ class AuthNotifier extends AsyncNotifier<UserModel?> {
   Future<void> markPhoneVerified() async {
     final userId = _supabase.auth.currentUser?.id;
     if (userId == null) return;
-    final current = state.value;
-    final newScore = (current?.trustScore ?? 0) + 20;
-    await _supabase.from('users').update({
-      'phone_verified': true,
-      'trust_score': newScore,
-      'updated_at': DateTime.now().toIso8601String(),
-    }).eq('id', userId);
-    state = AsyncData(await _fetchProfile(userId));
+    try {
+      final current = state.value;
+      final newScore = (current?.trustScore ?? 0) + 20;
+      await _supabase.from('users').update({
+        'phone_verified': true,
+        'trust_score': newScore,
+        'updated_at': DateTime.now().toIso8601String(),
+      }).eq('id', userId);
+      state = AsyncData(await _fetchProfile(userId));
+    } catch (_) {
+      // Non-critical — trust score update failure should not block navigation
+    }
   }
 }
 

@@ -2,6 +2,7 @@ import 'package:chipin/core/theme/app_theme.dart';
 import 'package:chipin/features/auth/presentation/providers/auth_provider.dart';
 import 'package:chipin/features/matches/presentation/providers/match_provider.dart';
 import 'package:chipin/shared/models/match_model.dart';
+import 'package:chipin/shared/widgets/error_retry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -24,10 +25,16 @@ class MessagesInboxScreen extends ConsumerWidget {
       ),
       body: receivedAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text('Error: $e')),
+        error: (e, _) => ErrorRetry(
+          error: e,
+          onRetry: () => ref.invalidate(receivedMatchesProvider),
+        ),
         data: (received) => sentAsync.when(
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (e, _) => Center(child: Text('Error: $e')),
+          error: (e, _) => ErrorRetry(
+            error: e,
+            onRetry: () => ref.invalidate(sentMatchesProvider),
+          ),
           data: (sent) {
             // Combine and filter to only accepted/active chats
             final allMatches = [...received, ...sent];

@@ -2,6 +2,7 @@ import 'package:chipin/core/theme/app_theme.dart';
 import 'package:chipin/features/auth/presentation/providers/auth_provider.dart';
 import 'package:chipin/features/listings/presentation/providers/listings_provider.dart';
 import 'package:chipin/shared/models/listing_model.dart';
+import 'package:chipin/shared/widgets/error_retry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -21,7 +22,7 @@ class _LatestFeedScreenState extends ConsumerState<LatestFeedScreen> {
     _TrendingCat('All', null, Icons.apps_rounded),
     _TrendingCat('Apartment', 'apartment', Icons.apartment_rounded),
     _TrendingCat('Subscription', 'subscription', Icons.subscriptions_rounded),
-    _TrendingCat('Travel', 'carpool', Icons.flight_rounded),
+    _TrendingCat('Travel', 'carpool', Icons.directions_car_rounded),
     _TrendingCat('Workspaces', 'office', Icons.work_rounded),
     _TrendingCat('Groceries', 'groceries', Icons.local_grocery_store_rounded),
   ];
@@ -36,41 +37,93 @@ class _LatestFeedScreenState extends ConsumerState<LatestFeedScreen> {
     final userId = ref.watch(currentUserIdProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
+    // Icon button bg: dark = cardTeal, light = slate-100
+    final iconBtnBg = isDark ? AppColors.cardTeal : const Color(0xFFF1F5F9);
+    final iconBtnColor =
+        isDark ? const Color(0xFF94A3B8) : const Color(0xFF475569);
+
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          children: [
-            Container(
-              width: 32,
-              height: 32,
-              decoration: const BoxDecoration(
-                color: AppColors.primary,
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(Icons.payments_rounded,
-                  size: 18, color: Colors.white),
-            ),
-            const SizedBox(width: 10),
-            const Text(
-              'ChipIn',
-              style: TextStyle(
-                fontFamily: 'Inter',
-                fontSize: 20,
-                fontWeight: FontWeight.w700,
-                color: AppColors.primary,
-              ),
-            ),
-          ],
-        ),
-        actions: userId == null
-            ? [
-                TextButton(
-                  onPressed: () => context.go('/login'),
-                  child: const Text('Sign In'),
+        automaticallyImplyLeading: false,
+        titleSpacing: 0,
+        title: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
+            children: [
+              // Logo circle
+              Container(
+                width: 40,
+                height: 40,
+                decoration: const BoxDecoration(
+                  color: AppColors.primary,
+                  shape: BoxShape.circle,
                 ),
-              ]
-            : null,
+                child: const Icon(Icons.payments_rounded,
+                    size: 20, color: Colors.white),
+              ),
+              const SizedBox(width: 10),
+              const Expanded(
+                child: Text(
+                  'ChipIn',
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.primary,
+                  ),
+                ),
+              ),
+              // Search button
+              GestureDetector(
+                onTap: () => context.go('/browse'),
+                child: Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: iconBtnBg,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(Icons.search_rounded,
+                      size: 20, color: iconBtnColor),
+                ),
+              ),
+              const SizedBox(width: 8),
+              // Bell button with primary badge
+              GestureDetector(
+                onTap: () => context.push('/notifications'),
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: iconBtnBg,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(Icons.notifications_outlined,
+                          size: 20, color: iconBtnColor),
+                    ),
+                    Positioned(
+                      top: 8,
+                      right: 8,
+                      child: Container(
+                        width: 8,
+                        height: 8,
+                        decoration: const BoxDecoration(
+                          color: AppColors.primary,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
+
       // ── Auth CTA bar — only shown for guests ────────────────────────────
       bottomNavigationBar: userId == null
           ? SafeArea(
@@ -97,24 +150,24 @@ class _LatestFeedScreenState extends ConsumerState<LatestFeedScreen> {
               ),
             )
           : null,
+
       body: CustomScrollView(
         slivers: [
-          // ── Community Stats ─────────────────────────────────────────────
+          // ── Community Stats ──────────────────────────────────────────────
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
               child: listingsAsync.when(
-                loading: () => _StatsGrid.placeholder(isDark: isDark),
+                loading: () =>
+                    _StatsGrid.placeholder(isDark: isDark),
                 error: (e, s) => const SizedBox.shrink(),
-                data: (listings) => _StatsGrid(
-                  listings: listings,
-                  isDark: isDark,
-                ),
+                data: (listings) =>
+                    _StatsGrid(listings: listings, isDark: isDark),
               ),
             ),
           ),
 
-          // ── Trending Categories ─────────────────────────────────────────
+          // ── Trending Categories ──────────────────────────────────────────
           SliverToBoxAdapter(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -127,7 +180,7 @@ class _LatestFeedScreenState extends ConsumerState<LatestFeedScreen> {
                       fontFamily: 'Inter',
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
-                      color: isDark ? Colors.white : AppColors.textPrimary,
+                      color: isDark ? AppColors.textDark : AppColors.textPrimary,
                     ),
                   ),
                 ),
@@ -137,7 +190,8 @@ class _LatestFeedScreenState extends ConsumerState<LatestFeedScreen> {
                     scrollDirection: Axis.horizontal,
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     itemCount: _trendingCategories.length,
-                    separatorBuilder: (context, i) => const SizedBox(width: 8),
+                    separatorBuilder: (context, i) =>
+                        const SizedBox(width: 8),
                     itemBuilder: (context, i) {
                       final cat = _trendingCategories[i];
                       final selected = cat.value == _selectedCategory;
@@ -151,12 +205,16 @@ class _LatestFeedScreenState extends ConsumerState<LatestFeedScreen> {
                           decoration: BoxDecoration(
                             color: selected
                                 ? AppColors.primary
-                                : AppColors.surface(context),
+                                : isDark
+                                    ? AppColors.cardTeal
+                                    : Colors.white,
                             borderRadius: BorderRadius.circular(22),
                             border: Border.all(
                               color: selected
                                   ? AppColors.primary
-                                  : AppColors.border(context),
+                                  : isDark
+                                      ? AppColors.borderDark
+                                      : AppColors.borderLight,
                             ),
                             boxShadow: selected
                                 ? [
@@ -164,7 +222,7 @@ class _LatestFeedScreenState extends ConsumerState<LatestFeedScreen> {
                                       color: AppColors.primary
                                           .withValues(alpha: 0.3),
                                       blurRadius: 8,
-                                    )
+                                    ),
                                   ]
                                 : null,
                           ),
@@ -188,7 +246,7 @@ class _LatestFeedScreenState extends ConsumerState<LatestFeedScreen> {
                                   color: selected
                                       ? Colors.white
                                       : isDark
-                                          ? const Color(0xFFCBD5E1)
+                                          ? AppColors.textSubtle
                                           : AppColors.textSecondary,
                                 ),
                               ),
@@ -204,7 +262,7 @@ class _LatestFeedScreenState extends ConsumerState<LatestFeedScreen> {
             ),
           ),
 
-          // ── Latest Opportunities header ─────────────────────────────────
+          // ── Latest Opportunities header ──────────────────────────────────
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
@@ -216,7 +274,8 @@ class _LatestFeedScreenState extends ConsumerState<LatestFeedScreen> {
                       fontFamily: 'Inter',
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
-                      color: isDark ? Colors.white : AppColors.textPrimary,
+                      color:
+                          isDark ? AppColors.textDark : AppColors.textPrimary,
                     ),
                   ),
                   const Spacer(),
@@ -237,13 +296,13 @@ class _LatestFeedScreenState extends ConsumerState<LatestFeedScreen> {
             ),
           ),
 
-          // ── Feed cards ─────────────────────────────────────────────────
+          // ── Feed cards ──────────────────────────────────────────────────
           listingsAsync.when(
             loading: () => SliverPadding(
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 100),
               sliver: SliverList(
                 delegate: SliverChildBuilderDelegate(
-                    (context, index) => const Padding(
+                  (context, index) => const Padding(
                     padding: EdgeInsets.only(bottom: 16),
                     child: _FeedCardSkeleton(),
                   ),
@@ -252,12 +311,9 @@ class _LatestFeedScreenState extends ConsumerState<LatestFeedScreen> {
               ),
             ),
             error: (e, _) => SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.all(32),
-                child: Center(
-                    child: Text('Could not load: $e',
-                        style: const TextStyle(
-                            color: AppColors.textSecondary))),
+              child: ErrorRetry(
+                error: e,
+                onRetry: () => ref.invalidate(listingsProvider),
               ),
             ),
             data: (listings) {
@@ -295,7 +351,9 @@ class _LatestFeedScreenState extends ConsumerState<LatestFeedScreen> {
                     (context, i) => Padding(
                       padding: const EdgeInsets.only(bottom: 16),
                       child: _FeedCard(
-                          listing: listings[i], isDark: isDark),
+                        listing: listings[i],
+                        isDark: isDark,
+                      ),
                     ),
                     childCount: listings.length,
                   ),
@@ -309,7 +367,7 @@ class _LatestFeedScreenState extends ConsumerState<LatestFeedScreen> {
   }
 }
 
-// ── Stats Grid ────────────────────────────────────────────────────────────────
+// ── Stats Grid ─────────────────────────────────────────────────────────────────
 
 class _StatsGrid extends StatelessWidget {
   final List<ListingModel> listings;
@@ -319,22 +377,34 @@ class _StatsGrid extends StatelessWidget {
   factory _StatsGrid.placeholder({required bool isDark}) =>
       _StatsGrid(listings: const [], isDark: isDark);
 
-  int get _totalSlots =>
+  int get _totalPeopleHelped =>
       listings.fold(0, (sum, l) => sum + l.slotsFilled);
 
   @override
   Widget build(BuildContext context) {
     final stats = [
-      _StatItem('Active Users', '12k+', 0.75, false, isDark),
-      _StatItem('Matches', '$_totalSlots+', 0.5, false, isDark),
-      _StatItem('Listings', '${listings.length}', listings.isEmpty ? 0.0 : 0.66, false, isDark),
+      _StatItem(
+        'Active Splits',
+        '${listings.isEmpty ? '—' : listings.length}',
+        listings.isEmpty ? 0.0 : 0.66,
+        false,
+        isDark,
+      ),
+      _StatItem(
+        'People Helped',
+        '$_totalPeopleHelped+',
+        listings.isEmpty ? 0.0 : 0.5,
+        false,
+        isDark,
+      ),
       _StatItem('Total Saved', '₦2.4M', 1.0, true, isDark),
+      _StatItem('Trust Score', '100', 0.8, false, isDark),
     ];
     return GridView.count(
       crossAxisCount: 2,
-      crossAxisSpacing: 10,
-      mainAxisSpacing: 10,
-      childAspectRatio: 2.2,
+      crossAxisSpacing: 12,
+      mainAxisSpacing: 12,
+      childAspectRatio: 2.1,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       children: stats,
@@ -353,13 +423,22 @@ class _StatItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final accent = success ? AppColors.success : AppColors.primary;
+    final accent = success ? AppColors.statusActive : AppColors.primary;
+    final cardBg = isDark ? AppColors.cardTeal : Colors.white;
+    final borderColor =
+        isDark ? AppColors.borderDark : AppColors.borderLight;
     return Container(
-      padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+      padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
       decoration: BoxDecoration(
-        color: AppColors.surface(context),
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.border(context)),
+        color: cardBg,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: borderColor),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: isDark ? 0.1 : 0.04),
+            blurRadius: 4,
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -382,12 +461,13 @@ class _StatItem extends StatelessWidget {
             value,
             style: TextStyle(
               fontFamily: 'Inter',
-              fontSize: 20,
+              fontSize: 22,
               fontWeight: FontWeight.w800,
               color: accent,
+              height: 1.1,
             ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 5),
           ClipRRect(
             borderRadius: BorderRadius.circular(4),
             child: LinearProgressIndicator(
@@ -403,7 +483,7 @@ class _StatItem extends StatelessWidget {
   }
 }
 
-// ── Feed Card ─────────────────────────────────────────────────────────────────
+// ── Feed Card ──────────────────────────────────────────────────────────────────
 
 class _FeedCard extends ConsumerStatefulWidget {
   final ListingModel listing;
@@ -436,13 +516,17 @@ class _FeedCardState extends ConsumerState<_FeedCard> {
   Widget build(BuildContext context) {
     final l = widget.listing;
     final isDark = widget.isDark;
-    final cardBg = AppColors.surface(context);
+    final cardBg = isDark ? AppColors.cardTeal : Colors.white;
+    final borderColor =
+        isDark ? AppColors.borderDark : AppColors.borderLight;
+    final mutedColor =
+        isDark ? const Color(0xFF94A3B8) : AppColors.textSecondary;
 
     return Container(
       decoration: BoxDecoration(
         color: cardBg,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border(context)),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: borderColor),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.05),
@@ -455,67 +539,116 @@ class _FeedCardState extends ConsumerState<_FeedCard> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ── Header ───────────────────────────────────────────────────────
+          // ── Header row ─────────────────────────────────────────────────
           Padding(
             padding: const EdgeInsets.fromLTRB(14, 14, 14, 10),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Avatar
-                CircleAvatar(
-                  radius: 20,
-                  backgroundColor: AppColors.primaryLight,
-                  backgroundImage: l.posterAvatarUrl != null
-                      ? NetworkImage(l.posterAvatarUrl!)
-                      : null,
-                  child: l.posterAvatarUrl == null
-                      ? Text(
-                          (l.posterName ?? '?')[0].toUpperCase(),
-                          style: const TextStyle(
-                            fontFamily: 'Inter',
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.primary,
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: AppColors.primary.withValues(alpha: 0.2),
+                      width: 2,
+                    ),
+                  ),
+                  child: ClipOval(
+                    child: l.posterAvatarUrl != null
+                        ? Image.network(
+                            l.posterAvatarUrl!,
+                            fit: BoxFit.cover,
+                            errorBuilder: (ctx, err, st) => Container(
+                              color: AppColors.primaryLight,
+                              child: Center(
+                                child: Text(
+                                  (l.posterName ?? '?')[0].toUpperCase(),
+                                  style: const TextStyle(
+                                    fontFamily: 'Inter',
+                                    fontWeight: FontWeight.w700,
+                                    color: AppColors.primary,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        : Container(
+                            color: AppColors.primaryLight,
+                            child: Center(
+                              child: Text(
+                                (l.posterName ?? '?')[0].toUpperCase(),
+                                style: const TextStyle(
+                                  fontFamily: 'Inter',
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.primary,
+                                ),
+                              ),
+                            ),
                           ),
-                        )
-                      : null,
+                  ),
                 ),
                 const SizedBox(width: 10),
+
+                // Name + time + category
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      // Name + verified check
                       Row(
                         children: [
-                          Text(
-                            l.posterName ?? 'Anonymous',
-                            style: TextStyle(
-                              fontFamily: 'Inter',
-                              fontSize: 14,
-                              fontWeight: FontWeight.w700,
-                              color: isDark
-                                  ? Colors.white
-                                  : AppColors.textPrimary,
+                          Flexible(
+                            child: Text(
+                              l.posterName ?? 'Anonymous',
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontFamily: 'Inter',
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700,
+                                color: isDark
+                                    ? AppColors.textDark
+                                    : AppColors.textPrimary,
+                              ),
                             ),
                           ),
                           const SizedBox(width: 4),
                           const Icon(Icons.verified_rounded,
-                              size: 14, color: AppColors.primary),
+                              size: 16, color: AppColors.primary),
                         ],
                       ),
-                      Text(
-                        '${timeago.format(l.createdAt)} • ',
-                        style: TextStyle(
-                          fontFamily: 'Inter',
-                          fontSize: 11,
-                          color: isDark
-                              ? const Color(0xFF94A3B8)
-                              : AppColors.textSecondary,
+                      const SizedBox(height: 2),
+                      // Time + category tag
+                      RichText(
+                        text: TextSpan(
+                          style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontSize: 11,
+                            color: mutedColor,
+                          ),
+                          children: [
+                            TextSpan(
+                                text:
+                                    '${timeago.format(l.createdAt)} • '),
+                            TextSpan(
+                              text: '[${l.category.label}]',
+                              style: const TextStyle(
+                                color: AppColors.primary,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
                   ),
                 ),
-                // Rating
-                if (l.posterTrustScore != null)
+
+                // Rating pill
+                if (l.posterTrustScore != null) ...[
+                  const SizedBox(width: 8),
                   Container(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 8, vertical: 4),
@@ -526,69 +659,72 @@ class _FeedCardState extends ConsumerState<_FeedCard> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(Icons.shield_rounded,
-                            size: 12, color: AppColors.primary),
+                        const Icon(Icons.star_rounded,
+                            size: 14, color: AppColors.starColor),
                         const SizedBox(width: 3),
                         Text(
-                          '${l.posterTrustScore!.toInt()}',
-                          style: const TextStyle(
+                          (l.posterTrustScore! / 20)
+                              .toStringAsFixed(1),
+                          style: TextStyle(
                             fontFamily: 'Inter',
                             fontSize: 11,
                             fontWeight: FontWeight.w700,
+                            color: isDark
+                                ? AppColors.textDark
+                                : AppColors.textPrimary,
                           ),
                         ),
                       ],
                     ),
                   ),
+                ],
               ],
             ),
           ),
 
-          // ── Title + location ──────────────────────────────────────────────
+          // ── Title ────────────────────────────────────────────────────────
           Padding(
-            padding: const EdgeInsets.fromLTRB(14, 0, 14, 8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            padding: const EdgeInsets.fromLTRB(14, 0, 14, 6),
+            child: Text(
+              l.title,
+              style: TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: isDark
+                    ? const Color(0xFFF1F5F9)
+                    : AppColors.textPrimary,
+              ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+
+          // ── Location ─────────────────────────────────────────────────────
+          Padding(
+            padding: const EdgeInsets.fromLTRB(14, 0, 14, 10),
+            child: Row(
               children: [
-                Text(
-                  l.title,
-                  style: TextStyle(
-                    fontFamily: 'Inter',
-                    fontSize: 17,
-                    fontWeight: FontWeight.w700,
-                    color: isDark ? Colors.white : AppColors.textPrimary,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
+                Icon(
+                  l.isRemote
+                      ? Icons.public_rounded
+                      : Icons.location_on_rounded,
+                  size: 14,
+                  color: mutedColor,
                 ),
-                const SizedBox(height: 4),
-                Row(
-                  children: [
-                    Icon(
-                      l.isRemote
-                          ? Icons.public_rounded
-                          : Icons.location_on_rounded,
-                      size: 13,
-                      color: isDark
-                          ? const Color(0xFF94A3B8)
-                          : AppColors.textSecondary,
+                const SizedBox(width: 3),
+                Expanded(
+                  child: Text(
+                    l.isRemote ? 'Digital / Global' : l.location,
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 12,
+                      color: mutedColor,
                     ),
-                    const SizedBox(width: 3),
-                    Expanded(
-                      child: Text(
-                        l.isRemote ? 'Digital / Global' : l.location,
-                        style: TextStyle(
-                          fontFamily: 'Inter',
-                          fontSize: 12,
-                          color: isDark
-                              ? const Color(0xFF94A3B8)
-                              : AppColors.textSecondary,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ],
             ),
@@ -596,34 +732,39 @@ class _FeedCardState extends ConsumerState<_FeedCard> {
 
           // ── Verification badges ───────────────────────────────────────────
           Padding(
-            padding: const EdgeInsets.fromLTRB(14, 0, 14, 8),
+            padding: const EdgeInsets.fromLTRB(14, 0, 14, 12),
             child: Wrap(
               spacing: 6,
+              runSpacing: 6,
               children: [
-                _Badge('✓ ID Verified'),
-                if ((l.posterTrustScore ?? 0) > 60) _Badge('✓ Trusted'),
+                _VerificationBadge('✓ ID Verified'),
+                _VerificationBadge('✓ Phone Verified'),
+                if ((l.posterTrustScore ?? 0) > 60)
+                  _VerificationBadge('✓ Trusted'),
               ],
             ),
           ),
 
-          // ── Price + slots ─────────────────────────────────────────────────
+          // ── Price + availability box ──────────────────────────────────────
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 14),
             child: Container(
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 14, vertical: 12),
               decoration: BoxDecoration(
                 color: isDark
-                    ? const Color(0x1A000000)
+                    ? Colors.black.withValues(alpha: 0.25)
                     : const Color(0xFFF8FAFC),
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
                   color: isDark
-                      ? const Color(0xFF2D4A50)
+                      ? AppColors.borderSlate
                       : const Color(0xFFE2E8F0),
                 ),
               ),
               child: Row(
                 children: [
+                  // Price
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -646,12 +787,15 @@ class _FeedCardState extends ConsumerState<_FeedCard> {
                           fontFamily: 'Inter',
                           fontSize: 20,
                           fontWeight: FontWeight.w800,
-                          color: isDark ? Colors.white : AppColors.textPrimary,
+                          color: isDark
+                              ? AppColors.textDark
+                              : AppColors.textPrimary,
                         ),
                       ),
                     ],
                   ),
                   const Spacer(),
+                  // Availability
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
@@ -670,11 +814,11 @@ class _FeedCardState extends ConsumerState<_FeedCard> {
                       const SizedBox(height: 2),
                       Text(
                         l.slotsLeft > 0
-                            ?               '${l.slotsLeft} spot${l.slotsLeft == 1 ? '' : 's'} left'
+                            ? '${l.slotsLeft} spot${l.slotsLeft == 1 ? '' : 's'} left'
                             : 'Full',
                         style: TextStyle(
                           fontFamily: 'Inter',
-                          fontSize: 14,
+                          fontSize: 13,
                           fontWeight: FontWeight.w700,
                           color: l.slotsLeft > 0
                               ? AppColors.primary
@@ -689,7 +833,7 @@ class _FeedCardState extends ConsumerState<_FeedCard> {
           ),
           const SizedBox(height: 12),
 
-          // ── CTA ───────────────────────────────────────────────────────────
+          // ── CTA button ────────────────────────────────────────────────────
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 14),
             child: SizedBox(
@@ -709,6 +853,7 @@ class _FeedCardState extends ConsumerState<_FeedCard> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
                   foregroundColor: Colors.white,
+                  elevation: 0,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)),
                   textStyle: const TextStyle(
@@ -722,102 +867,79 @@ class _FeedCardState extends ConsumerState<_FeedCard> {
           ),
           const SizedBox(height: 12),
 
-          // ── Social actions ─────────────────────────────────────────────────
+          // ── Social footer ─────────────────────────────────────────────────
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
             decoration: BoxDecoration(
               color: isDark
-                  ? const Color(0x0DFFFFFF)
+                  ? Colors.white.withValues(alpha: 0.04)
                   : const Color(0xFFF8FAFC),
               border: Border(
-                top: BorderSide(color: AppColors.border(context)),
+                top: BorderSide(color: borderColor),
               ),
             ),
             child: Row(
               children: [
-                Expanded(
+                // Like
+                GestureDetector(
+                  onTap: () => setState(() => _liked = !_liked),
                   child: Row(
                     children: [
-                      GestureDetector(
-                        onTap: () => setState(() => _liked = !_liked),
-                        child: Row(
-                          children: [
-                            Icon(
-                              _liked
-                                  ? Icons.favorite_rounded
-                                  : Icons.favorite_border_rounded,
-                              size: 20,
-                              color: _liked
-                                  ? Colors.red
-                                  : isDark
-                                      ? const Color(0xFF94A3B8)
-                                      : AppColors.textSecondary,
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              '${_liked ? 1 : 0}',
-                              style: TextStyle(
-                                fontFamily: 'Inter',
-                                fontSize: 12,
-                                fontWeight: FontWeight.w700,
-                                color: isDark
-                                    ? const Color(0xFF94A3B8)
-                                    : AppColors.textSecondary,
-                              ),
-                            ),
-                          ],
-                        ),
+                      Icon(
+                        _liked
+                            ? Icons.favorite_rounded
+                            : Icons.favorite_border_rounded,
+                        size: 20,
+                        color: _liked ? Colors.red : mutedColor,
                       ),
-                      const SizedBox(width: 18),
-                      Row(
-                        children: [
-                          Icon(Icons.chat_bubble_outline_rounded,
-                              size: 20,
-                              color: isDark
-                                  ? const Color(0xFF94A3B8)
-                                  : AppColors.textSecondary),
-                          const SizedBox(width: 4),
-                          Text(
-                            '0',
-                            style: TextStyle(
-                              fontFamily: 'Inter',
-                              fontSize: 12,
-                              fontWeight: FontWeight.w700,
-                              color: isDark
-                                  ? const Color(0xFF94A3B8)
-                                  : AppColors.textSecondary,
-                            ),
-                          ),
-                        ],
+                      const SizedBox(width: 4),
+                      Text(
+                        '${_liked ? 1 : 0}',
+                        style: TextStyle(
+                          fontFamily: 'Inter',
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: mutedColor,
+                        ),
                       ),
                     ],
                   ),
                 ),
+                const SizedBox(width: 16),
+                // Comment
                 Row(
                   children: [
-                    GestureDetector(
-                      onTap: () =>
-                          setState(() => _bookmarked = !_bookmarked),
-                      child: Icon(
-                        _bookmarked
-                            ? Icons.bookmark_rounded
-                            : Icons.bookmark_border_rounded,
-                        size: 20,
-                        color: _bookmarked
-                            ? AppColors.primary
-                            : isDark
-                                ? const Color(0xFF94A3B8)
-                                : AppColors.textSecondary,
+                    Icon(Icons.chat_bubble_outline_rounded,
+                        size: 20, color: mutedColor),
+                    const SizedBox(width: 4),
+                    Text(
+                      '0',
+                      style: TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: mutedColor,
                       ),
                     ),
-                    const SizedBox(width: 14),
-                    Icon(Icons.share_rounded,
-                        size: 20,
-                        color: isDark
-                            ? const Color(0xFF94A3B8)
-                            : AppColors.textSecondary),
                   ],
                 ),
+                const Spacer(),
+                // Bookmark
+                GestureDetector(
+                  onTap: () =>
+                      setState(() => _bookmarked = !_bookmarked),
+                  child: Icon(
+                    _bookmarked
+                        ? Icons.bookmark_rounded
+                        : Icons.bookmark_border_rounded,
+                    size: 20,
+                    color: _bookmarked ? AppColors.primary : mutedColor,
+                  ),
+                ),
+                const SizedBox(width: 14),
+                // Share
+                Icon(Icons.share_rounded, size: 20, color: mutedColor),
               ],
             ),
           ),
@@ -827,20 +949,22 @@ class _FeedCardState extends ConsumerState<_FeedCard> {
   }
 }
 
-class _Badge extends StatelessWidget {
+// ── Verification badge chip ────────────────────────────────────────────────────
+
+class _VerificationBadge extends StatelessWidget {
   final String label;
-  const _Badge(this.label);
+  const _VerificationBadge(this.label);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         color: AppColors.primary.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(6),
       ),
       child: Text(
-        label,
+        label.toUpperCase(),
         style: const TextStyle(
           fontFamily: 'Inter',
           fontSize: 9,
@@ -853,7 +977,7 @@ class _Badge extends StatelessWidget {
   }
 }
 
-// ── Skeleton placeholder ──────────────────────────────────────────────────────
+// ── Feed card skeleton ────────────────────────────────────────────────────────
 
 class _FeedCardSkeleton extends StatelessWidget {
   const _FeedCardSkeleton();
@@ -862,18 +986,18 @@ class _FeedCardSkeleton extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final shimmerColor =
-        isDark ? const Color(0xFF1E3438) : const Color(0xFFE2E8F0);
+        isDark ? const Color(0xFF1A2E32) : const Color(0xFFE2E8F0);
     return Container(
-      height: 280,
+      height: 300,
       decoration: BoxDecoration(
         color: shimmerColor,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(12),
       ),
     );
   }
 }
 
-// ── Trending category data ────────────────────────────────────────────────────
+// ── Trending category data ─────────────────────────────────────────────────────
 
 class _TrendingCat {
   final String label;

@@ -11,7 +11,7 @@ final messagesStreamProvider = StreamProvider.autoDispose
       .from('messages')
       .stream(primaryKey: ['id'])
       .eq('match_id', matchId)
-      .order('created_at')
+      .order('created_at', ascending: false)
       .map((data) => data
           .map((d) => MessageModel.fromJson(d))
           .toList());

@@ -4,8 +4,8 @@ import 'package:chipin/features/auth/presentation/pages/signup_screen.dart';
 import 'package:chipin/features/auth/presentation/pages/otp_screen.dart';
 import 'package:chipin/features/auth/presentation/providers/auth_provider.dart';
 import 'package:chipin/features/escrow/presentation/pages/dispute_screen.dart';
-import 'package:chipin/features/escrow/presentation/pages/escrow_deposit_screen.dart';
 import 'package:chipin/features/escrow/presentation/pages/escrow_status_screen.dart';
+import 'package:chipin/features/payments/presentation/pages/manual_payment_screen.dart';
 import 'package:chipin/features/reviews/presentation/pages/submit_review_screen.dart';
 import 'package:chipin/features/matches/presentation/pages/smart_match_screen.dart';
 import 'package:chipin/features/groups/presentation/pages/neighborhood_groups_screen.dart';
@@ -121,6 +121,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             ProfileScreen(userId: state.pathParameters['userId']!),
       ),
       GoRoute(
+        path: '/messages',
+        builder: (context, state) => const MessagesInboxScreen(),
+      ),
+      GoRoute(
         path: '/notifications',
         builder: (context, state) => const NotificationsScreen(),
       ),
@@ -147,7 +151,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/pay/:matchId',
         builder: (context, state) =>
-            EscrowDepositScreen(matchId: state.pathParameters['matchId']!),
+            ManualPaymentScreen(matchId: state.pathParameters['matchId']!),
       ),
       GoRoute(
         path: '/escrow/:matchId',
@@ -197,12 +201,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             GoRoute(
               path: '/matches',
               builder: (context, state) => const MatchesScreen(),
-            ),
-          ]),
-          StatefulShellBranch(routes: [
-            GoRoute(
-              path: '/messages',
-              builder: (context, state) => const MessagesInboxScreen(),
             ),
           ]),
           StatefulShellBranch(routes: [

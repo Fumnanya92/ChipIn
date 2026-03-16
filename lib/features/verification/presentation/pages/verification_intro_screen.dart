@@ -10,259 +10,249 @@ class VerificationIntroScreen extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      body: Stack(
-        children: [
-          // ── Gradient background ───────────────────────────────────────
-          Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: isDark
-                    ? [const Color(0xFF0A1214), const Color(0xFF101F22)]
-                    : [AppColors.primaryLight, AppColors.backgroundLight],
-              ),
-            ),
+      backgroundColor: AppColors.scaffoldBg(context),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_rounded,
+            color: AppColors.textOn(context),
           ),
-
-          // ── Hero decoration ───────────────────────────────────────────
-          Positioned(
-            top: -60,
-            right: -60,
-            child: Container(
-              width: 280,
-              height: 280,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.primary.withValues(alpha: 0.06),
-              ),
-            ),
+          onPressed: () => context.pop(),
+        ),
+        title: Text(
+          'Identity Verification',
+          style: TextStyle(
+            fontFamily: 'Inter',
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            color: AppColors.textOn(context),
           ),
-          Positioned(
-            bottom: 100,
-            left: -80,
-            child: Container(
-              width: 220,
-              height: 220,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.primary.withValues(alpha: 0.04),
-              ),
-            ),
-          ),
-
-          SafeArea(
-            child: Column(
-              children: [
-                // ── AppBar row ──────────────────────────────────────────
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 16, vertical: 8),
-                  child: Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () => context.pop(),
-                        child: Container(
-                          width: 40,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: isDark
-                                ? AppColors.primary.withValues(alpha: 0.12)
-                                : AppColors.primaryLight,
+        ),
+        centerTitle: true,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // ── Hero shield card ───────────────────────────────────────────
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+              child: Container(
+                height: 260,
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(16)),
+                  color: Color(0xFF0A1B1F),
+                ),
+                clipBehavior: Clip.hardEdge,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    // Background radial glow
+                    Positioned.fill(
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          gradient: RadialGradient(
+                            center: Alignment.center,
+                            radius: 0.72,
+                            colors: [
+                              AppColors.primary.withValues(alpha: 0.28),
+                              Colors.transparent,
+                            ],
                           ),
-                          child: const Icon(Icons.arrow_back_rounded,
-                              color: AppColors.primary, size: 20),
                         ),
                       ),
-                    ],
-                  ),
-                ),
-
-                Expanded(
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
-                    child: Column(
-                      children: [
-                        // ── Shield icon ─────────────────────────────────
-                        Container(
-                          width: 110,
-                          height: 110,
+                    ),
+                    // Shield icon with glow ring
+                    Container(
+                      width: 110,
+                      height: 110,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppColors.primary.withValues(alpha: 0.14),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.primary.withValues(alpha: 0.45),
+                            blurRadius: 64,
+                            spreadRadius: 16,
+                          ),
+                        ],
+                      ),
+                      child: const Icon(
+                        Icons.shield_rounded,
+                        size: 58,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                    // Bottom fade into card background
+                    const Positioned(
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      child: SizedBox(
+                        height: 80,
+                        child: DecoratedBox(
                           decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: AppColors.primary.withValues(alpha: 0.12),
-                            border: Border.all(
-                              color: AppColors.primary.withValues(alpha: 0.3),
-                              width: 2,
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Colors.transparent,
+                                Color(0xFF0A1B1F),
+                              ],
                             ),
                           ),
-                          child: const Icon(Icons.shield_rounded,
-                              size: 56, color: AppColors.primary),
                         ),
-                        const SizedBox(height: 28),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
 
-                        const Text(
-                          'Verify Your Identity',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontFamily: 'Inter',
-                            fontSize: 26,
-                            fontWeight: FontWeight.w800,
-                            color: AppColors.primary,
-                            letterSpacing: -0.5,
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          'Build trust with your matches by verifying who\nyou are. It only takes about 2 minutes.',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontFamily: 'Inter',
-                            fontSize: 15,
-                            color: isDark
-                                ? const Color(0xFF94A3B8)
-                                : AppColors.textSecondary,
-                            height: 1.5,
-                          ),
-                        ),
-                        const SizedBox(height: 36),
+            // ── Title ──────────────────────────────────────────────────────
+            Padding(
+              padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
+              child: Text(
+                'Verify Your Identity',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: 'Inter',
+                  fontSize: 28,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.textOn(context),
+                  letterSpacing: -0.5,
+                  height: 1.2,
+                ),
+              ),
+            ),
 
-                        // ── Benefits grid ────────────────────────────────
-                        Row(
-                          children: [
-                            _BenefitCard(
-                              icon: Icons.trending_up_rounded,
-                              label: 'Trust Score\nBoost',
-                              isDark: isDark,
-                            ),
-                            const SizedBox(width: 12),
-                            _BenefitCard(
-                              icon: Icons.verified_rounded,
-                              label: 'Verified\nBadge',
-                              isDark: isDark,
-                            ),
-                            const SizedBox(width: 12),
-                            _BenefitCard(
-                              icon: Icons.lock_rounded,
-                              label: 'Secure &\nPrivate',
-                              isDark: isDark,
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 36),
+            // ── Subtitle with inline "ChipIn" in primary ───────────────────
+            Padding(
+              padding: const EdgeInsets.fromLTRB(24, 10, 24, 0),
+              child: RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 15,
+                    color: isDark
+                        ? const Color(0xFF94A3B8)
+                        : const Color(0xFF475569),
+                    height: 1.55,
+                  ),
+                  children: const [
+                    TextSpan(
+                      text:
+                          'Boost your profile and unlock more opportunities on ',
+                    ),
+                    TextSpan(
+                      text: 'ChipIn',
+                      style: TextStyle(
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    TextSpan(
+                      text:
+                          ' by completing a quick secure verification process.',
+                    ),
+                  ],
+                ),
+              ),
+            ),
 
-                        // ── Steps ─────────────────────────────────────────
-                        _StepItem(
-                          number: '1',
-                          title: 'Choose your ID type',
-                          description:
-                              'Passport, driver\'s license, or national ID',
-                          isDark: isDark,
-                        ),
-                        const SizedBox(height: 16),
-                        _StepItem(
-                          number: '2',
-                          title: 'Photograph your document',
-                          description:
-                              'Make sure all details are clearly visible',
-                          isDark: isDark,
-                        ),
-                        const SizedBox(height: 16),
-                        _StepItem(
-                          number: '3',
-                          title: 'Take a selfie',
-                          description:
-                              'A quick face match to confirm it\'s you',
-                          isDark: isDark,
-                        ),
-                        const SizedBox(height: 44),
+            // ── 3 Benefit cards ────────────────────────────────────────────
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 24, 16, 0),
+              child: Column(
+                children: [
+                  _BenefitCard(
+                    icon: Icons.trending_up_rounded,
+                    title: 'Trust Score Boost',
+                    subtitle:
+                        'Increase your credibility and attract more partners instantly.',
+                    isDark: isDark,
+                  ),
+                  const SizedBox(height: 12),
+                  _BenefitCard(
+                    icon: Icons.verified_rounded,
+                    title: 'Verified Badge',
+                    subtitle:
+                        'Get a professional checkmark next to your name and profile.',
+                    isDark: isDark,
+                  ),
+                  const SizedBox(height: 12),
+                  _BenefitCard(
+                    icon: Icons.lock_rounded,
+                    title: 'Secure & Private',
+                    subtitle:
+                        'Your data is encrypted and never shared with third parties.',
+                    isDark: isDark,
+                  ),
+                ],
+              ),
+            ),
 
-                        // ── CTA ───────────────────────────────────────────
-                        SizedBox(
-                          width: double.infinity,
-                          height: 54,
-                          child: ElevatedButton(
-                            onPressed: () =>
-                                context.push('/verify/id-upload'),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.primary,
-                              foregroundColor: Colors.white,
-                              elevation: 0,
-                              shadowColor:
-                                  AppColors.primary.withValues(alpha: 0.3),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(14)),
-                            ),
-                            child: const Text(
-                              'Start Verification',
-                              style: TextStyle(
-                                fontFamily: 'Inter',
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                              ),
+            // ── CTA + disclaimer ───────────────────────────────────────────
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 32, 16, 40),
+              child: Column(
+                children: [
+                  SizedBox(
+                    width: double.infinity,
+                    height: 56,
+                    child: ElevatedButton(
+                      onPressed: () => context.push('/verify'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: AppColors.backgroundDark,
+                        elevation: 8,
+                        shadowColor:
+                            AppColors.primary.withValues(alpha: 0.20),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            'Start Verification',
+                            style: TextStyle(
+                              fontFamily: 'Inter',
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.backgroundDark,
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          'Your data is encrypted and never shared without your consent.',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontFamily: 'Inter',
-                            fontSize: 12,
-                            color: isDark
-                                ? const Color(0xFF64748B)
-                                : AppColors.textMuted,
+                          SizedBox(width: 8),
+                          Icon(
+                            Icons.arrow_forward_rounded,
+                            size: 20,
+                            color: AppColors.backgroundDark,
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _BenefitCard extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final bool isDark;
-
-  const _BenefitCard(
-      {required this.icon, required this.label, required this.isDark});
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        padding:
-            const EdgeInsets.symmetric(horizontal: 10, vertical: 16),
-        decoration: BoxDecoration(
-          color: AppColors.primary.withValues(alpha: isDark ? 0.08 : 0.06),
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(
-              color: AppColors.primary.withValues(alpha: 0.2)),
-        ),
-        child: Column(
-          children: [
-            Icon(icon, color: AppColors.primary, size: 26),
-            const SizedBox(height: 8),
-            Text(
-              label,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontFamily: 'Inter',
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
-                color: isDark
-                    ? const Color(0xFFE2E8F0)
-                    : AppColors.textPrimary,
-                height: 1.4,
+                  const SizedBox(height: 12),
+                  const Text(
+                    "By tapping 'Start Verification', you agree to our Identity "
+                    'Verification Terms and Privacy Policy. It usually takes '
+                    'less than 2 minutes.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 11,
+                      color: AppColors.textMuted,
+                      height: 1.5,
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
@@ -272,72 +262,77 @@ class _BenefitCard extends StatelessWidget {
   }
 }
 
-class _StepItem extends StatelessWidget {
-  final String number;
+// ── Benefit row card ─────────────────────────────────────────────────────────
+
+class _BenefitCard extends StatelessWidget {
+  final IconData icon;
   final String title;
-  final String description;
+  final String subtitle;
   final bool isDark;
 
-  const _StepItem(
-      {required this.number,
-      required this.title,
-      required this.description,
-      required this.isDark});
+  const _BenefitCard({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.isDark,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          width: 32,
-          height: 32,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: AppColors.primary,
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: isDark
+            ? AppColors.primary.withValues(alpha: 0.05)
+            : AppColors.surfaceLight,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: isDark
+              ? AppColors.primary.withValues(alpha: 0.20)
+              : AppColors.borderLight,
+        ),
+      ),
+      child: Row(
+        children: [
+          // Icon container
+          Container(
+            width: 48,
+            height: 48,
+            decoration: BoxDecoration(
+              color: AppColors.primary.withValues(alpha: isDark ? 0.20 : 0.10),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(icon, color: AppColors.primary, size: 24),
           ),
-          alignment: Alignment.center,
-          child: Text(
-            number,
-            style: const TextStyle(
-              fontFamily: 'Inter',
-              fontSize: 13,
-              fontWeight: FontWeight.w800,
-              color: Colors.white,
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.textOn(context),
+                  ),
+                ),
+                const SizedBox(height: 3),
+                Text(
+                  subtitle,
+                  style: const TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 13,
+                    color: AppColors.textSecondary,
+                    height: 1.4,
+                  ),
+                ),
+              ],
             ),
           ),
-        ),
-        const SizedBox(width: 14),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: TextStyle(
-                  fontFamily: 'Inter',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                  color: isDark
-                      ? const Color(0xFFE2E8F0)
-                      : AppColors.textPrimary,
-                ),
-              ),
-              const SizedBox(height: 2),
-              Text(
-                description,
-                style: TextStyle(
-                  fontFamily: 'Inter',
-                  fontSize: 12,
-                  color: isDark
-                      ? const Color(0xFF94A3B8)
-                      : AppColors.textSecondary,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

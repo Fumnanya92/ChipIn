@@ -1,5 +1,6 @@
 import 'package:chipin/core/theme/app_theme.dart';
 import 'package:chipin/features/profile/presentation/providers/profile_provider.dart';
+import 'package:chipin/shared/widgets/error_retry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -50,13 +51,13 @@ class _VerificationScreenState extends ConsumerState<VerificationScreen> {
                   ),
                 ),
               ),
-              const Text(
+              Text(
                 'Verify Your Phone',
                 style: TextStyle(
                   fontFamily: 'Inter',
                   fontSize: 18,
                   fontWeight: FontWeight.w800,
-                  color: AppColors.textPrimary,
+                  color: AppColors.isDark(ctx) ? AppColors.textDark : AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 6),
@@ -76,16 +77,16 @@ class _VerificationScreenState extends ConsumerState<VerificationScreen> {
                   hintText: '+234 800 000 0000',
                   prefixIcon: const Icon(Icons.phone_outlined),
                   filled: true,
-                  fillColor: const Color(0xFFF8FAFC),
+                  fillColor: AppColors.surface(ctx),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide:
-                        const BorderSide(color: AppColors.borderLight),
+                        BorderSide(color: AppColors.border(ctx)),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide:
-                        const BorderSide(color: AppColors.borderLight),
+                        BorderSide(color: AppColors.border(ctx)),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -121,13 +122,22 @@ class _VerificationScreenState extends ConsumerState<VerificationScreen> {
     // still references the controller finishes before we tear it down.
     WidgetsBinding.instance.addPostFrameCallback((_) => phoneCtrl.dispose());
     if (result != null && result.isNotEmpty && mounted) {
+      final normalized = _normalizePhone(result);
       context.push('/otp', extra: {
-        'phone': result,
+        'phone': normalized,
         'fullName': '',
         'email': '',
         'password': '',
       });
     }
+  }
+
+  /// Normalize phone to E.164 (+234...) — mirrors signup_screen logic.
+  String _normalizePhone(String raw) {
+    final digits = raw.replaceAll(RegExp(r'[^\d+]'), '');
+    if (digits.startsWith('+')) return digits;
+    if (digits.startsWith('0')) return '+234${digits.substring(1)}';
+    return '+234$digits';
   }
 
   Future<void> _startIdVerification() async {
@@ -173,7 +183,10 @@ class _VerificationScreenState extends ConsumerState<VerificationScreen> {
       ),
       body: profileAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text('Error: $e')),
+        error: (e, _) => ErrorRetry(
+          error: e,
+          onRetry: () => ref.invalidate(userProfileProvider('me')),
+        ),
         data: (profile) {
           return ListView(
             padding: const EdgeInsets.fromLTRB(20, 16, 20, 40),
@@ -227,13 +240,13 @@ class _VerificationScreenState extends ConsumerState<VerificationScreen> {
               ),
               const SizedBox(height: 24),
 
-              const Text(
+              Text(
                 'Verification Layers',
                 style: TextStyle(
                   fontFamily: 'Inter',
                   fontSize: 17,
                   fontWeight: FontWeight.w700,
-                  color: AppColors.textPrimary,
+                  color: AppColors.textOn(context),
                 ),
               ),
               const SizedBox(height: 4),
@@ -300,20 +313,20 @@ class _VerificationScreenState extends ConsumerState<VerificationScreen> {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.surface(context),
                   borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: AppColors.borderLight),
+                  border: Border.all(color: AppColors.border(context)),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'How Trust Score is Built',
                       style: TextStyle(
                         fontFamily: 'Inter',
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
-                        color: AppColors.textPrimary,
+                        color: AppColors.textOn(context),
                       ),
                     ),
                     const SizedBox(height: 12),
@@ -359,10 +372,10 @@ class _VerificationTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.surface(context),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: isDone ? AppColors.success : AppColors.borderLight,
+          color: isDone ? AppColors.success : AppColors.border(context),
           width: isDone ? 1.5 : 1,
         ),
       ),
@@ -388,11 +401,11 @@ class _VerificationTile extends StatelessWidget {
           children: [
             Text(
               title,
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'Inter',
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
-                color: AppColors.textPrimary,
+                color: AppColors.textOn(context),
               ),
             ),
             const SizedBox(width: 8),

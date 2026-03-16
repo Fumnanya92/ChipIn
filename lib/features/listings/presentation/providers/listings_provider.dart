@@ -111,7 +111,34 @@ class ListingsNotifier extends AsyncNotifier<List<ListingModel>> {
     final listing = ListingModel.fromJson(result);
     final current = state.value ?? [];
     state = AsyncData([listing, ...current]);
+    // Invalidate the FutureProvider so BrowseScreen picks up the new listing.
+    ref.invalidate(listingsProvider);
     return listing;
+  }
+
+  Future<void> deleteListing(String listingId) async {
+    await _supabase.from('listings').delete().eq('id', listingId);
+    ref.invalidate(myListingsProvider);
+  }
+
+  Future<void> updateListingStatus(String listingId, String status) async {
+    await _supabase
+        .from('listings')
+        .update({'status': status})
+        .eq('id', listingId);
+    ref.invalidate(myListingsProvider);
+  }
+
+  Future<void> updateListing(
+      String listingId, Map<String, dynamic> data) async {
+    final now = DateTime.now().toIso8601String();
+    await _supabase
+        .from('listings')
+        .update({...data, 'updated_at': now})
+        .eq('id', listingId);
+    ref.invalidate(listingByIdProvider(listingId));
+    ref.invalidate(listingsProvider);
+    ref.invalidate(myListingsProvider);
   }
 }
 

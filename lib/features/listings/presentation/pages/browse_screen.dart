@@ -2,6 +2,7 @@ import 'package:chipin/core/theme/app_theme.dart';
 import 'package:chipin/features/listings/presentation/providers/listings_provider.dart';
 import 'package:chipin/features/home/presentation/pages/home_screen.dart';
 import 'package:chipin/shared/models/listing_model.dart';
+import 'package:chipin/shared/widgets/error_retry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -65,6 +66,7 @@ class _BrowseScreenState extends ConsumerState<BrowseScreen> {
   @override
   Widget build(BuildContext context) {
     final listingsAsync = ref.watch(listingsProvider);
+    final isDark = AppColors.isDark(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -79,20 +81,48 @@ class _BrowseScreenState extends ConsumerState<BrowseScreen> {
             child: TextField(
               controller: _searchCtrl,
               onChanged: (v) => setState(() => _query = v),
+              style: TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 14,
+                color: AppColors.textOn(context),
+              ),
               decoration: InputDecoration(
                 hintText: 'Search splits, categories…',
-                prefixIcon:
-                    const Icon(Icons.search_rounded, color: AppColors.textMuted),
+                prefixIcon: const Icon(
+                  Icons.search_rounded,
+                  color: AppColors.textMuted,
+                  size: 20,
+                ),
                 suffixIcon: _query.isNotEmpty
                     ? IconButton(
                         icon: const Icon(Icons.clear_rounded,
-                            color: AppColors.textMuted),
+                            color: AppColors.textMuted, size: 18),
                         onPressed: () {
                           _searchCtrl.clear();
                           setState(() => _query = '');
                         },
                       )
                     : null,
+                filled: true,
+                fillColor: isDark
+                    ? AppColors.cardDark
+                    : const Color(0xFFF1F5F9),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide:
+                      const BorderSide(color: AppColors.primary, width: 1.5),
+                ),
+                contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16, vertical: 12),
+                isDense: true,
               ),
             ),
           ),
@@ -133,29 +163,61 @@ class _BrowseScreenState extends ConsumerState<BrowseScreen> {
                   children: [
                     Text(
                       '${filtered.length} split${filtered.length == 1 ? '' : 's'}',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'Inter',
                         fontSize: 13,
-                        color: AppColors.textSecondary,
+                        color: AppColors.textSub(context),
                       ),
                     ),
                     const Spacer(),
                     DropdownButton<String>(
                       value: _sortBy,
                       underline: const SizedBox(),
-                      style: const TextStyle(
+                      dropdownColor: isDark
+                          ? AppColors.cardDark
+                          : AppColors.surfaceLight,
+                      style: TextStyle(
                         fontFamily: 'Inter',
                         fontSize: 13,
-                        color: AppColors.textPrimary,
+                        color: AppColors.textOn(context),
                       ),
-                      items: const [
-                        DropdownMenuItem(value: 'newest', child: Text('Newest')),
+                      items: [
                         DropdownMenuItem(
-                            value: 'price_asc', child: Text('Price ↑')),
+                          value: 'newest',
+                          child: Text(
+                            'Newest',
+                            style: TextStyle(
+                                fontFamily: 'Inter',
+                                color: AppColors.textOn(context)),
+                          ),
+                        ),
                         DropdownMenuItem(
-                            value: 'price_desc', child: Text('Price ↓')),
+                          value: 'price_asc',
+                          child: Text(
+                            'Price ↑',
+                            style: TextStyle(
+                                fontFamily: 'Inter',
+                                color: AppColors.textOn(context)),
+                          ),
+                        ),
                         DropdownMenuItem(
-                            value: 'trust', child: Text('Trust Score')),
+                          value: 'price_desc',
+                          child: Text(
+                            'Price ↓',
+                            style: TextStyle(
+                                fontFamily: 'Inter',
+                                color: AppColors.textOn(context)),
+                          ),
+                        ),
+                        DropdownMenuItem(
+                          value: 'trust',
+                          child: Text(
+                            'Trust Score',
+                            style: TextStyle(
+                                fontFamily: 'Inter',
+                                color: AppColors.textOn(context)),
+                          ),
+                        ),
                       ],
                       onChanged: (v) =>
                           setState(() => _sortBy = v ?? 'newest'),
@@ -170,37 +232,46 @@ class _BrowseScreenState extends ConsumerState<BrowseScreen> {
           // Listing list
           Expanded(
             child: listingsAsync.when(
-              loading: () => ListView.builder(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 80),
-                itemCount: 5,
-                itemBuilder: (_, _) => Padding(
-                  padding: const EdgeInsets.only(bottom: 16),
-                  child: Shimmer.fromColors(
-                    baseColor: Colors.grey.shade200,
-                    highlightColor: Colors.grey.shade100,
-                    child: Container(
-                      height: 110,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(14),
+              loading: () {
+                final baseColor = isDark
+                    ? const Color(0xFF1A2832)
+                    : Colors.grey.shade200;
+                final highlightColor = isDark
+                    ? const Color(0xFF1E3040)
+                    : Colors.grey.shade100;
+                return ListView.builder(
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 80),
+                  itemCount: 5,
+                  itemBuilder: (_, _) => Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: Shimmer.fromColors(
+                      baseColor: baseColor,
+                      highlightColor: highlightColor,
+                      child: Container(
+                        height: 240,
+                        decoration: BoxDecoration(
+                          color: baseColor,
+                          borderRadius: BorderRadius.circular(14),
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ),
-              error: (e, _) => Center(
-                child: Text('Error: $e',
-                    style:
-                        const TextStyle(color: AppColors.textSecondary)),
+                );
+              },
+              error: (e, _) => ErrorRetry(
+                error: e,
+                onRetry: () => ref.invalidate(listingsProvider),
               ),
               data: (all) {
                 final filtered = _filtered(all);
                 if (filtered.isEmpty) {
-                  return const Center(
+                  return Center(
                     child: Text(
                       'No splits match your search.',
                       style: TextStyle(
-                          fontFamily: 'Inter', color: AppColors.textSecondary),
+                        fontFamily: 'Inter',
+                        color: AppColors.textSub(context),
+                      ),
                     ),
                   );
                 }
@@ -241,10 +312,10 @@ class _FilterChip extends StatelessWidget {
         duration: const Duration(milliseconds: 180),
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
         decoration: BoxDecoration(
-          color: selected ? AppColors.primary : Colors.white,
+          color: selected ? AppColors.primary : AppColors.surface(context),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: selected ? AppColors.primary : AppColors.borderLight,
+            color: selected ? AppColors.primary : AppColors.border(context),
           ),
         ),
         child: Text(
@@ -253,7 +324,7 @@ class _FilterChip extends StatelessWidget {
             fontFamily: 'Inter',
             fontSize: 12,
             fontWeight: FontWeight.w600,
-            color: selected ? Colors.white : AppColors.textSecondary,
+            color: selected ? Colors.white : AppColors.textSub(context),
           ),
         ),
       ),

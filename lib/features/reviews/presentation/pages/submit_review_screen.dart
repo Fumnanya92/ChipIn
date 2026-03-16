@@ -1,3 +1,4 @@
+import 'package:chipin/core/config/app_constants.dart';
 import 'package:chipin/core/theme/app_theme.dart';
 import 'package:chipin/features/auth/presentation/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
@@ -53,6 +54,20 @@ class _SubmitReviewScreenState extends ConsumerState<SubmitReviewScreen> {
         if (_commentCtrl.text.trim().isNotEmpty)
           'comment': _commentCtrl.text.trim(),
       });
+
+      // Increment trust score for the reviewee (+2 pts per completed split).
+      // Requires this Postgres function in Supabase:
+      //   CREATE OR REPLACE FUNCTION increment_trust_score(user_id uuid, points int)
+      //   RETURNS void AS $$ UPDATE users SET trust_score = trust_score + points
+      //   WHERE id = user_id; $$ LANGUAGE sql SECURITY DEFINER;
+      try {
+        await supabase.rpc('increment_trust_score', params: {
+          'user_id': revieweeId,
+          'points': AppConstants.trustPerCompletedSplit,
+        });
+      } catch (_) {
+        // Trust score update is best-effort; don't block review submission.
+      }
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

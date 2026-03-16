@@ -12,6 +12,9 @@
 .swiftpm/
 migrate_working_dir/
 
+# Secrets
+.env
+
 # IntelliJ related
 *.iml
 *.ipr
@@ -35,6 +38,16 @@ migrate_working_dir/
 
 # Symbolication related
 app.*.symbols
+ 
+# Custom ignores
+.claude/
+.vscode/
+Magic Naviagtion Menu 3/
+*.zip
+android/app/google-services.json
+ios/GoogleService-Info.plist
+ios/Runner/GoogleService-Info.plist
+ios/Podfile.lock
 
 # Obfuscation related
 app.*.map.json

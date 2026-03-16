@@ -36,6 +36,12 @@ class MatchModel extends Equatable {
   final DateTime createdAt;
   final DateTime updatedAt;
 
+  // Payment tracking fields
+  final String? paymentInstructions;
+  final DateTime? requesterPaidAt;
+  final DateTime? ownerConfirmedAt;
+  final String? receiptUrl;
+
   // Joined fields
   final String? listingTitle;
   final String? listingImageUrl;
@@ -55,6 +61,10 @@ class MatchModel extends Equatable {
     this.message,
     required this.createdAt,
     required this.updatedAt,
+    this.paymentInstructions,
+    this.requesterPaidAt,
+    this.ownerConfirmedAt,
+    this.receiptUrl,
     this.listingTitle,
     this.listingImageUrl,
     this.listingAmount,
@@ -78,6 +88,14 @@ class MatchModel extends Equatable {
       message: json['message'] as String?,
       createdAt: DateTime.parse(json['created_at'] as String),
       updatedAt: DateTime.parse(json['updated_at'] as String),
+      paymentInstructions: json['payment_instructions'] as String?,
+      requesterPaidAt: json['requester_paid_at'] != null
+          ? DateTime.parse(json['requester_paid_at'] as String)
+          : null,
+      ownerConfirmedAt: json['owner_confirmed_at'] != null
+          ? DateTime.parse(json['owner_confirmed_at'] as String)
+          : null,
+      receiptUrl: json['receipt_url'] as String?,
       listingTitle: json['listings']?['title'] as String?,
       listingImageUrl: json['listings']?['image_url'] as String?,
       listingAmount: (json['listings']?['split_amount'] as num?)?.toDouble(),
@@ -108,6 +126,10 @@ class MatchModel extends Equatable {
     String? message,
     DateTime? createdAt,
     DateTime? updatedAt,
+    String? paymentInstructions,
+    DateTime? requesterPaidAt,
+    DateTime? ownerConfirmedAt,
+    String? receiptUrl,
   }) {
     return MatchModel(
       id: id ?? this.id,
@@ -118,6 +140,10 @@ class MatchModel extends Equatable {
       message: message ?? this.message,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      paymentInstructions: paymentInstructions ?? this.paymentInstructions,
+      requesterPaidAt: requesterPaidAt ?? this.requesterPaidAt,
+      ownerConfirmedAt: ownerConfirmedAt ?? this.ownerConfirmedAt,
+      receiptUrl: receiptUrl ?? this.receiptUrl,
       listingTitle: listingTitle,
       listingImageUrl: listingImageUrl,
       listingAmount: listingAmount,

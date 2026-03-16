@@ -124,18 +124,18 @@ class _DisputeScreenState extends ConsumerState<DisputeScreen> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 14),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.surface(context),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppColors.borderLight),
+                  border: Border.all(color: AppColors.border(context)),
                 ),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
                     value: _selectedReason,
                     isExpanded: true,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'Inter',
                       fontSize: 14,
-                      color: AppColors.textPrimary,
+                      color: AppColors.isDark(context) ? AppColors.textDark : AppColors.textPrimary,
                     ),
                     items: _reasons
                         .map((r) => DropdownMenuItem(
@@ -158,7 +158,7 @@ class _DisputeScreenState extends ConsumerState<DisputeScreen> {
                 maxLines: 5,
                 maxLength: 500,
                 decoration: _inputDecor(
-                    'Please describe what happened in as much detail as possible.'),
+                    context, 'Please describe what happened in as much detail as possible.'),
                 validator: (v) =>
                     (v == null || v.trim().length < 20)
                         ? 'Please write at least 20 characters'
@@ -170,20 +170,20 @@ class _DisputeScreenState extends ConsumerState<DisputeScreen> {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.surface(context),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppColors.borderLight),
+                  border: Border.all(color: AppColors.border(context)),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'What happens next',
                       style: TextStyle(
                         fontFamily: 'Inter',
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
-                        color: AppColors.textPrimary,
+                        color: AppColors.isDark(context) ? AppColors.textDark : AppColors.textPrimary,
                       ),
                     ),
                     const SizedBox(height: 10),
@@ -259,21 +259,19 @@ class _DisputeScreenState extends ConsumerState<DisputeScreen> {
     );
   }
 
-  static InputDecoration _inputDecor(String hint) {
+  InputDecoration _inputDecor(BuildContext context, String hint) {
     return InputDecoration(
       hintText: hint,
       hintStyle: const TextStyle(color: AppColors.textMuted),
-      filled: true,
-      fillColor: Colors.white,
       contentPadding:
           const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: AppColors.borderLight),
+        borderSide: BorderSide(color: AppColors.border(context)),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: AppColors.borderLight),
+        borderSide: BorderSide(color: AppColors.border(context)),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
@@ -291,11 +289,11 @@ class _Label extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: const TextStyle(
+      style: TextStyle(
         fontFamily: 'Inter',
         fontSize: 13,
         fontWeight: FontWeight.w600,
-        color: AppColors.textPrimary,
+        color: AppColors.isDark(context) ? AppColors.textDark : AppColors.textPrimary,
       ),
     );
   }

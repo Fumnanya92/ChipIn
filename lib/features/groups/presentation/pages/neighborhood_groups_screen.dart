@@ -1,5 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipin/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
+
+// ── Local dark surface colors (GitHub-style — not added to AppColors) ─────────
+const Color _surfaceDark = Color(0xFF161B22);
+const Color _borderDark = Color(0xFF30363D);
+const Color _bgDark = Color(0xFF0D1117);
 
 // ── Model ─────────────────────────────────────────────────────────────────────
 
@@ -29,7 +35,7 @@ class _Group {
   });
 }
 
-// ── Mock data (replace with Supabase neighborhood_groups table when ready) ─────
+// ── Mock data (replace with Supabase neighborhood_groups when ready) ───────────
 
 const _joined = [
   _Group(
@@ -92,11 +98,12 @@ const _nearby = [
   ),
 ];
 
-const _categories = [
-  'All',
-  'Building splits',
-  'Street sharing',
-  'Local services',
+// Category filter items: (label, icon)
+const _catItems = <(String, IconData?)>[
+  ('All', null),
+  ('Building splits', Icons.domain_rounded),
+  ('Street sharing', Icons.share_location_rounded),
+  ('Local services', Icons.handshake_rounded),
 ];
 
 // ── Screen ────────────────────────────────────────────────────────────────────
@@ -109,7 +116,8 @@ class NeighborhoodGroupsScreen extends StatefulWidget {
       _NeighborhoodGroupsScreenState();
 }
 
-class _NeighborhoodGroupsScreenState extends State<NeighborhoodGroupsScreen> {
+class _NeighborhoodGroupsScreenState
+    extends State<NeighborhoodGroupsScreen> {
   String _selectedCat = 'All';
   final _searchCtrl = TextEditingController();
 
@@ -122,10 +130,8 @@ class _NeighborhoodGroupsScreenState extends State<NeighborhoodGroupsScreen> {
   List<_Group> get _filteredNearby {
     final q = _searchCtrl.text.toLowerCase();
     return _nearby.where((g) {
-      final catOk =
-          _selectedCat == 'All' || g.category == _selectedCat;
-      final qOk =
-          q.isEmpty || g.name.toLowerCase().contains(q);
+      final catOk = _selectedCat == 'All' || g.category == _selectedCat;
+      final qOk = q.isEmpty || g.name.toLowerCase().contains(q);
       return catOk && qOk;
     }).toList();
   }
@@ -144,61 +150,132 @@ class _NeighborhoodGroupsScreenState extends State<NeighborhoodGroupsScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
+      backgroundColor: isDark ? _bgDark : AppColors.backgroundLight,
+
+      // ── AppBar ─────────────────────────────────────────────────────────────
       appBar: AppBar(
-        title: const Text('Neighborhood Groups'),
+        backgroundColor: isDark ? _bgDark : AppColors.surfaceLight,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: true,
+        leadingWidth: 52,
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 12),
+          child: GestureDetector(
+            onTap: () => Navigator.of(context).maybePop(),
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Icon(
+                Icons.arrow_back_rounded,
+                color: isDark ? AppColors.textDark : AppColors.textPrimary,
+              ),
+            ),
+          ),
+        ),
+        title: Text(
+          'Neighborhood Groups',
+          style: TextStyle(
+            fontFamily: 'Inter',
+            fontSize: 17,
+            fontWeight: FontWeight.w700,
+            color: isDark ? AppColors.textDark : AppColors.textPrimary,
+          ),
+        ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.add_rounded),
-            tooltip: 'Create group',
-            onPressed: () => _showComingSoon('Create group'),
+          Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: GestureDetector(
+              onTap: () => _showComingSoon('Create group'),
+              child: Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withValues(alpha: 0.10),
+                  shape: BoxShape.circle,
+                ),
+                child: const Center(
+                  child: Icon(
+                    Icons.add_rounded,
+                    color: AppColors.primary,
+                    size: 22,
+                  ),
+                ),
+              ),
+            ),
           ),
         ],
       ),
 
-      // ── FAB ────────────────────────────────────────────────────────────
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _showComingSoon('Create group'),
-        backgroundColor: AppColors.primary,
-        foregroundColor: Colors.white,
-        child: const Icon(Icons.add_rounded),
+      // ── FAB ────────────────────────────────────────────────────────────────
+      floatingActionButton: DecoratedBox(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.primary.withValues(alpha: 0.40),
+              blurRadius: 20,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: FloatingActionButton(
+          onPressed: () => _showComingSoon('Create group'),
+          backgroundColor: AppColors.primary,
+          foregroundColor: Colors.white,
+          elevation: 0,
+          shape: const CircleBorder(),
+          child: const Icon(Icons.add_rounded, size: 28),
+        ),
       ),
 
       body: CustomScrollView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         slivers: [
-          // ── Search bar ──────────────────────────────────────────────────
+          // ── Search bar ────────────────────────────────────────────────────
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+              padding: const EdgeInsets.fromLTRB(16, 14, 16, 0),
               child: Container(
                 height: 48,
                 decoration: BoxDecoration(
-                  color: AppColors.surface(context),
+                  color: isDark ? _surfaceDark : const Color(0xFFF1F5F9),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppColors.border(context)),
+                  border: Border.all(
+                    color: isDark ? _borderDark : AppColors.borderLight,
+                  ),
                 ),
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 child: Row(
                   children: [
-                    Icon(Icons.search_rounded,
-                        size: 20,
-                        color: isDark
-                            ? const Color(0xFF94A3B8)
-                            : AppColors.textMuted),
+                    Icon(
+                      Icons.search_rounded,
+                      size: 20,
+                      color: isDark
+                          ? AppColors.textMuted
+                          : AppColors.textSecondary,
+                    ),
                     const SizedBox(width: 8),
                     Expanded(
                       child: TextField(
                         controller: _searchCtrl,
                         onChanged: (_) => setState(() {}),
                         decoration: InputDecoration(
-                          hintText: 'Search neighborhoods…',
+                          hintText: 'Search groups…',
                           border: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          contentPadding: EdgeInsets.zero,
                           hintStyle: TextStyle(
                             fontFamily: 'Inter',
                             fontSize: 14,
                             color: isDark
-                                ? const Color(0xFF94A3B8)
-                                : AppColors.textMuted,
+                                ? AppColors.textMuted
+                                : AppColors.textSecondary,
                           ),
                         ),
                         style: TextStyle(
@@ -214,7 +291,7 @@ class _NeighborhoodGroupsScreenState extends State<NeighborhoodGroupsScreen> {
             ),
           ),
 
-          // ── Category chips ──────────────────────────────────────────────
+          // ── Category filter pills ─────────────────────────────────────────
           SliverToBoxAdapter(
             child: SizedBox(
               height: 52,
@@ -222,51 +299,71 @@ class _NeighborhoodGroupsScreenState extends State<NeighborhoodGroupsScreen> {
                 scrollDirection: Axis.horizontal,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                itemCount: _categories.length,
-                separatorBuilder: (context, i) => const SizedBox(width: 8),
+                itemCount: _catItems.length,
+                separatorBuilder: (_, _) => const SizedBox(width: 8),
                 itemBuilder: (context, i) {
-                  final cat = _categories[i];
-                  final selected = cat == _selectedCat;
+                  final (label, icon) = _catItems[i];
+                  final selected = label == _selectedCat;
                   return GestureDetector(
-                    onTap: () => setState(() => _selectedCat = cat),
+                    onTap: () => setState(() => _selectedCat = label),
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 200),
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 0),
+                          horizontal: 14, vertical: 0),
                       decoration: BoxDecoration(
                         color: selected
                             ? AppColors.primary
-                            : AppColors.surface(context),
+                            : isDark
+                                ? _surfaceDark
+                                : const Color(0xFFEDF2F7),
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(
                           color: selected
                               ? AppColors.primary
-                              : AppColors.border(context),
+                              : isDark
+                                  ? _borderDark
+                                  : AppColors.borderLight,
                         ),
                         boxShadow: selected
                             ? [
                                 BoxShadow(
-                                  color:
-                                      AppColors.primary.withValues(alpha: 0.3),
+                                  color: AppColors.primary
+                                      .withValues(alpha: 0.3),
                                   blurRadius: 8,
                                   offset: const Offset(0, 2),
-                                )
+                                ),
                               ]
                             : null,
                       ),
-                      alignment: Alignment.center,
-                      child: Text(
-                        cat,
-                        style: TextStyle(
-                          fontFamily: 'Inter',
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: selected
-                              ? Colors.white
-                              : isDark
-                                  ? const Color(0xFFCBD5E1)
-                                  : AppColors.textSecondary,
-                        ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (icon != null) ...[
+                            Icon(
+                              icon,
+                              size: 14,
+                              color: selected
+                                  ? Colors.white
+                                  : isDark
+                                      ? AppColors.textSubtle
+                                      : AppColors.textSecondary,
+                            ),
+                            const SizedBox(width: 5),
+                          ],
+                          Text(
+                            label,
+                            style: TextStyle(
+                              fontFamily: 'Inter',
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                              color: selected
+                                  ? Colors.white
+                                  : isDark
+                                      ? AppColors.textSubtle
+                                      : AppColors.textSecondary,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   );
@@ -275,20 +372,19 @@ class _NeighborhoodGroupsScreenState extends State<NeighborhoodGroupsScreen> {
             ),
           ),
 
-          // ── Joined Groups ───────────────────────────────────────────────
+          // ── "Joined Groups" header ────────────────────────────────────────
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 10),
+              padding: const EdgeInsets.fromLTRB(16, 18, 16, 10),
               child: Row(
                 children: [
                   Text(
                     'Joined Groups',
                     style: TextStyle(
                       fontFamily: 'Inter',
-                      fontSize: 17,
+                      fontSize: 18,
                       fontWeight: FontWeight.w700,
-                      color:
-                          isDark ? Colors.white : AppColors.textPrimary,
+                      color: isDark ? Colors.white : AppColors.textPrimary,
                     ),
                   ),
                   const Spacer(),
@@ -309,29 +405,30 @@ class _NeighborhoodGroupsScreenState extends State<NeighborhoodGroupsScreen> {
             ),
           ),
 
+          // ── Joined group cards (horizontal scroll) ────────────────────────
           SliverToBoxAdapter(
             child: SizedBox(
-              height: 168,
+              height: 182,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 4),
                 itemCount: _joined.length,
-                separatorBuilder: (context, i) => const SizedBox(width: 14),
+                separatorBuilder: (_, _) => const SizedBox(width: 12),
                 itemBuilder: (context, i) =>
                     _JoinedGroupCard(group: _joined[i], isDark: isDark),
               ),
             ),
           ),
 
-          // ── Recommended Nearby ──────────────────────────────────────────
+          // ── "Recommended Nearby" header ───────────────────────────────────
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 24, 16, 12),
+              padding: const EdgeInsets.fromLTRB(16, 22, 16, 12),
               child: Text(
                 'Recommended Nearby',
                 style: TextStyle(
                   fontFamily: 'Inter',
-                  fontSize: 17,
+                  fontSize: 18,
                   fontWeight: FontWeight.w700,
                   color: isDark ? Colors.white : AppColors.textPrimary,
                 ),
@@ -339,17 +436,21 @@ class _NeighborhoodGroupsScreenState extends State<NeighborhoodGroupsScreen> {
             ),
           ),
 
+          // ── Nearby group cards ────────────────────────────────────────────
           if (_filteredNearby.isEmpty)
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.all(32),
                 child: Center(
                   child: Text(
-                    'No groups found for "$_selectedCat"',
-                    style: const TextStyle(
-                        fontFamily: 'Inter',
-                        fontSize: 14,
-                        color: AppColors.textSecondary),
+                    'No groups found',
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 14,
+                      color: isDark
+                          ? AppColors.textMuted
+                          : AppColors.textSecondary,
+                    ),
                   ),
                 ),
               ),
@@ -377,11 +478,12 @@ class _NeighborhoodGroupsScreenState extends State<NeighborhoodGroupsScreen> {
   }
 }
 
-// ── Joined Group Thumbnail ────────────────────────────────────────────────────
+// ── Joined Group Thumbnail Card ───────────────────────────────────────────────
 
 class _JoinedGroupCard extends StatelessWidget {
   final _Group group;
   final bool isDark;
+
   const _JoinedGroupCard({required this.group, required this.isDark});
 
   IconData get _icon {
@@ -395,57 +497,138 @@ class _JoinedGroupCard extends StatelessWidget {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 130,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Thumbnail
-          Stack(
-            children: [
-              Container(
-                width: 120,
-                height: 120,
-                decoration: BoxDecoration(
-                  color: isDark
-                      ? AppColors.cardDark
-                      : const Color(0xFFE2E8F0),
-                  borderRadius: BorderRadius.circular(18),
-                  border: Border.all(color: AppColors.border(context)),
-                ),
-                child: Center(
-                  child: Icon(_icon,
-                      size: 40,
-                      color: AppColors.primary.withValues(alpha: 0.7)),
-                ),
+  // Generate overlapping mini avatar widgets
+  List<Widget> _buildAvatars() {
+    final count = group.memberCount > 12
+        ? 3
+        : group.memberCount > 5
+            ? 2
+            : 1;
+    final avatarColors = [
+      const Color(0xFF94A3B8),
+      const Color(0xFF64748B),
+      AppColors.primary,
+    ];
+    final extras = group.memberCount > 3 ? group.memberCount - 2 : 0;
+    final List<Widget> widgets = [];
+    for (int i = 0; i < count; i++) {
+      final isLast = i == count - 1 && extras > 0;
+      widgets.add(
+        Transform.translate(
+          offset: Offset(i * -7.0, 0),
+          child: Container(
+            width: 20,
+            height: 20,
+            decoration: BoxDecoration(
+              color: isLast ? AppColors.primary : avatarColors[i],
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: _surfaceDark,
+                width: 2,
               ),
-              if (group.isActive)
-                Positioned(
-                  bottom: 8,
-                  left: 8,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 6, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: AppColors.success,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: const Text(
-                      'Active now',
-                      style: TextStyle(
+            ),
+            child: isLast
+                ? Center(
+                    child: Text(
+                      '+$extras',
+                      style: const TextStyle(
                         fontFamily: 'Inter',
-                        fontSize: 9,
+                        fontSize: 7,
                         fontWeight: FontWeight.w700,
                         color: Colors.white,
                       ),
                     ),
+                  )
+                : null,
+          ),
+        ),
+      );
+    }
+    return widgets;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final cardBg =
+        isDark ? const Color(0xFF1A2535) : const Color(0xFFE2E8F0);
+
+    return SizedBox(
+      width: 148,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Square thumbnail with gradient + mini avatars
+          ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: Stack(
+              children: [
+                // Background photo
+                CachedNetworkImage(
+                  imageUrl:
+                      'https://picsum.photos/seed/${group.name.replaceAll(' ', '')}/300/300',
+                  width: 128,
+                  height: 128,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) => Container(
+                    width: 128,
+                    height: 128,
+                    color: cardBg,
+                    child: Center(
+                      child: Icon(
+                        _icon,
+                        size: 44,
+                        color: AppColors.primary.withValues(alpha: 0.45),
+                      ),
+                    ),
+                  ),
+                  errorWidget: (context, url, error) => Container(
+                    width: 128,
+                    height: 128,
+                    color: cardBg,
+                    child: Center(
+                      child: Icon(
+                        _icon,
+                        size: 44,
+                        color: AppColors.primary.withValues(alpha: 0.45),
+                      ),
+                    ),
                   ),
                 ),
-            ],
+
+                // Gradient overlay bottom → top
+                Positioned.fill(
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                        colors: [
+                          Colors.black.withValues(alpha: 0.60),
+                          Colors.transparent,
+                        ],
+                        stops: const [0.0, 0.55],
+                      ),
+                    ),
+                  ),
+                ),
+
+                // Mini avatars — bottom-left
+                Positioned(
+                  bottom: 8,
+                  left: 8,
+                  child: SizedBox(
+                    width: 52,
+                    height: 20,
+                    child: Stack(
+                      children: _buildAvatars(),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 7),
+          // Group name
           Text(
             group.name,
             style: TextStyle(
@@ -457,17 +640,22 @@ class _JoinedGroupCard extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
+          const SizedBox(height: 2),
+          // Active / lastActive label
           Text(
-            group.lastActive ?? (group.isActive ? 'Active now' : ''),
+            group.isActive
+                ? 'Active now'
+                : (group.lastActive ?? ''),
             style: TextStyle(
               fontFamily: 'Inter',
-              fontSize: 11,
+              fontSize: 10,
+              fontWeight:
+                  group.isActive ? FontWeight.w600 : FontWeight.w400,
               color: group.isActive
                   ? AppColors.primary
                   : isDark
-                      ? const Color(0xFF94A3B8)
+                      ? AppColors.textMuted
                       : AppColors.textSecondary,
-              fontWeight: group.isActive ? FontWeight.w600 : FontWeight.w400,
             ),
           ),
         ],
@@ -482,8 +670,12 @@ class _NearbyGroupCard extends StatelessWidget {
   final _Group group;
   final bool isDark;
   final VoidCallback onJoin;
-  const _NearbyGroupCard(
-      {required this.group, required this.isDark, required this.onJoin});
+
+  const _NearbyGroupCard({
+    required this.group,
+    required this.isDark,
+    required this.onJoin,
+  });
 
   IconData get _icon {
     switch (group.category) {
@@ -500,27 +692,52 @@ class _NearbyGroupCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.surface(context),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border(context)),
+        color: isDark ? _surfaceDark : AppColors.surfaceLight,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: isDark ? _borderDark : AppColors.borderLight,
+        ),
       ),
       clipBehavior: Clip.hardEdge,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Image area
+          // ── Image area ────────────────────────────────────────────────────
           Stack(
             children: [
-              Container(
-                height: 110,
+              CachedNetworkImage(
+                imageUrl:
+                    'https://picsum.photos/seed/${group.name.replaceAll(' ', '')}/600/300',
+                height: 120,
                 width: double.infinity,
-                color: isDark
-                    ? const Color(0xFF1A2E32)
-                    : const Color(0xFFE2E8F0),
-                child: Center(
-                  child: Icon(_icon,
+                fit: BoxFit.cover,
+                placeholder: (context, url) => Container(
+                  height: 120,
+                  width: double.infinity,
+                  color: isDark
+                      ? const Color(0xFF1A2535)
+                      : const Color(0xFFE2E8F0),
+                  child: Center(
+                    child: Icon(
+                      _icon,
                       size: 44,
-                      color: AppColors.primary.withValues(alpha: 0.5)),
+                      color: AppColors.primary.withValues(alpha: 0.45),
+                    ),
+                  ),
+                ),
+                errorWidget: (context, url, error) => Container(
+                  height: 120,
+                  width: double.infinity,
+                  color: isDark
+                      ? const Color(0xFF1A2535)
+                      : const Color(0xFFE2E8F0),
+                  child: Center(
+                    child: Icon(
+                      _icon,
+                      size: 44,
+                      color: AppColors.primary.withValues(alpha: 0.45),
+                    ),
+                  ),
                 ),
               ),
               if (group.isTopRated)
@@ -529,7 +746,7 @@ class _NearbyGroupCard extends StatelessWidget {
                   right: 10,
                   child: Container(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 8, vertical: 4),
+                        horizontal: 10, vertical: 4),
                     decoration: BoxDecoration(
                       color: AppColors.primary,
                       borderRadius: BorderRadius.circular(20),
@@ -548,13 +765,16 @@ class _NearbyGroupCard extends StatelessWidget {
                 ),
             ],
           ),
-          // Content
+
+          // ── Card body ─────────────────────────────────────────────────────
           Padding(
             padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // Name + Join button row
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
                       child: Column(
@@ -571,14 +791,16 @@ class _NearbyGroupCard extends StatelessWidget {
                                   : AppColors.textPrimary,
                             ),
                           ),
-                          const SizedBox(height: 2),
+                          const SizedBox(height: 3),
                           Row(
                             children: [
-                              Icon(Icons.location_on_rounded,
-                                  size: 12,
-                                  color: isDark
-                                      ? const Color(0xFF94A3B8)
-                                      : AppColors.textSecondary),
+                              Icon(
+                                Icons.location_on_rounded,
+                                size: 12,
+                                color: isDark
+                                    ? AppColors.textMuted
+                                    : AppColors.textSecondary,
+                              ),
                               const SizedBox(width: 2),
                               Text(
                                 group.distance,
@@ -586,7 +808,7 @@ class _NearbyGroupCard extends StatelessWidget {
                                   fontFamily: 'Inter',
                                   fontSize: 12,
                                   color: isDark
-                                      ? const Color(0xFF94A3B8)
+                                      ? AppColors.textMuted
                                       : AppColors.textSecondary,
                                 ),
                               ),
@@ -595,35 +817,49 @@ class _NearbyGroupCard extends StatelessWidget {
                         ],
                       ),
                     ),
-                    ElevatedButton(
-                      onPressed: onJoin,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primary,
-                        foregroundColor: Colors.white,
+
+                    // Join button (rounded-full)
+                    GestureDetector(
+                      onTap: onJoin,
+                      child: Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 18, vertical: 8),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)),
-                        textStyle: const TextStyle(
-                          fontFamily: 'Inter',
-                          fontSize: 13,
-                          fontWeight: FontWeight.w700,
+                            horizontal: 16, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: const Text(
+                          'Join',
+                          style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
-                      child: const Text('Join'),
                     ),
                   ],
                 ),
+
                 const SizedBox(height: 12),
+
+                // Divider
                 Divider(
-                    height: 1,
-                    color:
-                        isDark ? AppColors.borderDark : AppColors.borderLight),
+                  height: 1,
+                  color: isDark ? _borderDark : AppColors.borderLight,
+                ),
+
                 const SizedBox(height: 10),
+
+                // Stats row
                 Row(
                   children: [
-                    Icon(Icons.group_rounded,
-                        size: 16, color: AppColors.primary),
+                    const Icon(
+                      Icons.group_rounded,
+                      size: 14,
+                      color: AppColors.primary,
+                    ),
                     const SizedBox(width: 4),
                     Text(
                       '${group.memberCount} members',
@@ -632,16 +868,18 @@ class _NearbyGroupCard extends StatelessWidget {
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
                         color: isDark
-                            ? const Color(0xFF94A3B8)
+                            ? AppColors.textMuted
                             : AppColors.textSecondary,
                       ),
                     ),
                     const SizedBox(width: 16),
-                    Icon(Icons.forum_rounded,
-                        size: 16,
-                        color: isDark
-                            ? const Color(0xFF94A3B8)
-                            : AppColors.textSecondary),
+                    Icon(
+                      Icons.forum_rounded,
+                      size: 14,
+                      color: isDark
+                          ? AppColors.textMuted
+                          : AppColors.textSecondary,
+                    ),
                     const SizedBox(width: 4),
                     Text(
                       '${group.newPosts} new posts',
@@ -650,7 +888,7 @@ class _NearbyGroupCard extends StatelessWidget {
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
                         color: isDark
-                            ? const Color(0xFF94A3B8)
+                            ? AppColors.textMuted
                             : AppColors.textSecondary,
                       ),
                     ),
