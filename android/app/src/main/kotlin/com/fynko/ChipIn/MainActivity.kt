@@ -1,4 +1,4 @@
-package com.example.cost_sharing_app
+package com.fynko.ChipIn
 
 import io.flutter.embedding.android.FlutterActivity
 

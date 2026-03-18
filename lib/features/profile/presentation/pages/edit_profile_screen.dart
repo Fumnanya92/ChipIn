@@ -82,7 +82,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                 ),
               );
           newAvatarUrl =
-              '${supabase.storage.from('avatars').getPublicUrl(storagePath)}?t=${DateTime.now().millisecondsSinceEpoch}';
+              '${supabase.storage.from('avatars').getPublicUrl(storagePath)}?v=${DateTime.now().millisecondsSinceEpoch}';
         }
       }
 

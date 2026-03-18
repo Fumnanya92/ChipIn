@@ -77,17 +77,35 @@ class _SelfieVerificationScreenState
     setState(() => _isSubmitting = true);
 
     try {
-      final supabase = ref.read(supabaseClientProvider);
+      final supabaseService = ref.read(supabaseServiceProvider);
       final userId = ref.read(currentUserIdProvider);
-      // TODO Phase 2: upload selfie to Supabase Storage and trigger KYC.
-      // Phase 1: mark a pending verification request in the DB.
-      await supabase.from('verification_requests').upsert({
-        'user_id': userId,
-        'status': 'pending',
-        'submitted_at': DateTime.now().toIso8601String(),
-      });
-    } catch (_) {
-      // Non-critical — proceed even if the insert fails for now.
+
+      if (userId == null) {
+        if (mounted) {
+          setState(() => _isSubmitting = false);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('User not authenticated'))
+          );
+        }
+        return;
+      }
+
+      // Upload selfie to Supabase Storage
+      await supabaseService.uploadSelfie(
+        userId: userId,
+        imageFile: _selfieImage!,
+      );
+
+      // Mark user as ID verified and update trust score
+      await supabaseService.markIdVerified(userId);
+    } catch (e) {
+      if (mounted) {
+        setState(() => _isSubmitting = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Submission failed: ${e.toString()}'))
+        );
+        return;
+      }
     }
 
     if (!mounted) return;

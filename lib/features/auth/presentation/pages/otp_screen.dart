@@ -117,9 +117,19 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
       await ref.read(authNotifierProvider.notifier).markPhoneVerified();
       if (!mounted) return;
       if (widget.email.isNotEmpty) {
-        context.go('/home');
+        // Use a delayed transition to ensure proper cleanup
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            context.go('/home');
+          }
+        });
       } else {
-        context.pop();
+        // Use a delayed pop to ensure proper cleanup
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            context.pop();
+          }
+        });
       }
     } catch (e) {
       _isVerified = false; // allow retry on error
@@ -151,7 +161,16 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
       );
       await _signInWithCredential(credential);
     } catch (e) {
-      if (mounted) setState(() => _errorMsg = 'Verification failed. Try again.');
+      // Reset the _isVerified flag to allow retries
+      _isVerified = false;
+      if (mounted) {
+        setState(() {
+          _errorMsg = e is FirebaseAuthException
+            ? (e.message ?? 'Verification failed. Try again.')
+            : 'Verification failed. Try again.';
+          _isLoading = false;
+        });
+      }
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }

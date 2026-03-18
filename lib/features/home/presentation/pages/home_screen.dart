@@ -508,8 +508,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ),
         errorWidget: (ctx, url, err) => Container(
           color: AppColors.primaryLight,
-          child: const Icon(Icons.person_rounded,
-              size: 18, color: AppColors.primary),
+          child: Center(
+            child: Text(
+              (user.displayName.isNotEmpty ? user.displayName[0].toUpperCase() : 'C'),
+              style: const TextStyle(
+                color: AppColors.primary,
+                fontWeight: FontWeight.w700,
+                fontSize: 14,
+              ),
+            ),
+          ),
         ),
       );
     }

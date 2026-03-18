@@ -277,7 +277,7 @@ class _VerificationScreenState extends ConsumerState<VerificationScreen> {
               ),
               const SizedBox(height: 12),
 
-              // Layer 2: ID / KYC (Stripe Identity — Phase 2)
+              // Layer 2: ID / KYC (Supabase Storage — Live)
               _VerificationTile(
                 icon: Icons.badge_rounded,
                 title: 'ID Verification',
@@ -289,7 +289,6 @@ class _VerificationScreenState extends ConsumerState<VerificationScreen> {
                 onTap: (profile?.idVerified ?? false)
                     ? null
                     : _startIdVerification,
-                badgeLabel: 'Phase 2',
               ),
               const SizedBox(height: 12),
 

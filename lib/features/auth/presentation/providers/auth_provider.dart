@@ -1,9 +1,15 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:chipin/shared/models/user_model.dart';
+import 'package:chipin/shared/services/supabase_service.dart';
 
 final supabaseClientProvider = Provider<SupabaseClient>((ref) {
   return Supabase.instance.client;
+});
+
+final supabaseServiceProvider = Provider<SupabaseService>((ref) {
+  final client = ref.watch(supabaseClientProvider);
+  return SupabaseService(client);
 });
 
 // Stream of the raw Supabase User (null = logged out)

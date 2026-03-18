@@ -1,17 +1,19 @@
 import 'dart:io';
 import 'package:chipin/core/theme/app_theme.dart';
+import 'package:chipin/features/auth/presentation/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
-class IdUploadScreen extends StatefulWidget {
+class IdUploadScreen extends ConsumerStatefulWidget {
   const IdUploadScreen({super.key});
 
   @override
-  State<IdUploadScreen> createState() => _IdUploadScreenState();
+  ConsumerState<IdUploadScreen> createState() => _IdUploadScreenState();
 }
 
-class _IdUploadScreenState extends State<IdUploadScreen>
+class _IdUploadScreenState extends ConsumerState<IdUploadScreen>
     with SingleTickerProviderStateMixin {
   int _selectedDocType = 0;
   File? _capturedImage;
@@ -50,11 +52,40 @@ class _IdUploadScreenState extends State<IdUploadScreen>
   Future<void> _submit() async {
     if (_capturedImage == null) return;
     setState(() => _isLoading = true);
-    // TODO Phase 2: Upload to Supabase Storage and submit to KYC provider.
-    await Future.delayed(const Duration(milliseconds: 500));
-    if (!mounted) return;
-    setState(() => _isLoading = false);
-    context.push('/verify/selfie');
+
+    try {
+      final supabaseService = ref.read(supabaseServiceProvider);
+      final userId = ref.read(currentUserIdProvider);
+
+      if (userId == null) {
+        if (mounted) {
+          setState(() => _isLoading = false);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('User not authenticated'))
+          );
+        }
+        return;
+      }
+
+      // Upload ID document to Supabase Storage
+      await supabaseService.uploadIdDocument(
+        userId: userId,
+        imageFile: _capturedImage!,
+        documentType: _docTypes[_selectedDocType],
+      );
+
+      if (!mounted) return;
+
+      setState(() => _isLoading = false);
+      context.push('/verify/selfie');
+    } catch (e) {
+      if (mounted) {
+        setState(() => _isLoading = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Upload failed: ${e.toString()}'))
+        );
+      }
+    }
   }
 
   @override
